@@ -1,0 +1,61 @@
+name: Event Sync
+
+on:
+  # 手动触发
+  workflow_dispatch:
+  schedule:
+    - cron: '*/5 * * * *' # UTC 时间，每5分钟运行一次
+  # 推送到 main 分支时也可以触发（可选）
+  push:
+    branches:
+      - main
+    paths:
+      - 'eventSyncScript/**'
+      - '.github/workflows/event-sync.yml'
+
+jobs:
+  sync-events:
+    name: Sync Blockchain Events
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.18.0'
+          cache: 'npm'
+          cache-dependency-path: eventSyncScript/package-lock.json
+
+      - name: Install dependencies
+        working-directory: eventSyncScript
+        run: npm ci
+
+      - name: Run event sync script
+        working-directory: eventSyncScript
+        env:
+          # Supabase 配置（从 GitHub Secrets 读取）
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          
+          # 事件同步配置
+          EVENT_SYNC_USE_PROXY: 'false' # GitHub Actions 中不需要代理
+          EVENT_SYNC_SAVE_JSON: 'false' # 不需要保存 JSON 文件
+          
+          # 可选：自定义同步配置（可通过 GitHub Secrets 配置）
+          EVENT_SYNC_FROM_BLOCK: ${{ secrets.EVENT_SYNC_FROM_BLOCK }}
+          EVENT_SYNC_LIMIT: ${{ secrets.EVENT_SYNC_LIMIT }}
+          EVENT_SYNC_BATCH_SIZE: ${{ secrets.EVENT_SYNC_BATCH_SIZE }}
+        run: npm start
+        continue-on-error: false
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sync-logs
+          path: eventSyncScript/*.log
+          if-no-files-found: ignore
+
