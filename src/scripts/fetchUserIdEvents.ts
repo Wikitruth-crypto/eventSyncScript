@@ -2,7 +2,7 @@ import { ContractName } from '../contractsConfig/types'
 import type { RuntimeScope } from '../oasisQuery/types/searchScope'
 import { syncRuntimeContractEvents } from '../core/sync'
 import { DEFAULT_SCOPE, EVENT_QUERY_CONFIG } from '../config/sync'
-import { persistUserIdSync } from '../services/supabase/userIdWriter'
+import { persistUserAddressSync } from '../services/supabase/userAddressWriter'
 import { saveEventDataToFile, shouldSaveEventDataToFile } from '../utils/saveEventDataToFile'
 import { decodeContractEvents } from '../utils/decodeEvents'
 
@@ -53,7 +53,7 @@ export async function fetchUserIdEvents(
     }
 
     // ✅ 写入数据库
-    await persistUserIdSync(scope, ContractName.USER_ID, syncResultWithDecodedEvents)
+    await persistUserAddressSync(scope, ContractName.USER_ID, syncResultWithDecodedEvents)
 
     let outputPath: string | null = null
     if (shouldSaveEventDataToFile()) {

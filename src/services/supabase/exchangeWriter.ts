@@ -7,27 +7,7 @@ import { ensureUsersExist } from './usersWriter'
 import { getSupabaseClient } from '../../config/supabase'
 import { getEventArgAsString, sanitizeForSupabase } from './utils'
 import type { DecodedRuntimeEvent } from '../../oasisQuery/app/services/events'
-
-/**
- * 从事件中提取时间戳
- */
-const extractTimestamp = (event: DecodedRuntimeEvent<Record<string, unknown>>): string => {
-    const round = event.raw.round
-    if (round !== undefined && round !== null) {
-        return String(round)
-    }
-    const timestampStr = event.raw.timestamp
-    if (timestampStr) {
-        try {
-            const date = new Date(timestampStr)
-            const unixTimestamp = Math.floor(date.getTime() / 1000)
-            return String(unixTimestamp)
-        } catch {
-            return String(Math.floor(Date.now() / 1000))
-        }
-    }
-    return String(Math.floor(Date.now() / 1000))
-}
+import { extractTimestamp } from '../../utils/extractTimestamp'
 
 /**
  * 处理 BoxListed 事件
@@ -117,16 +97,7 @@ const handleBidPlaced = async (
 
     const supabase = getSupabaseClient()
 
-    // 检查是否已存在
-    const { data: existing } = await supabase
-        .from('box_bidders')
-        .select('id')
-        .match({ network: scope.network, layer: scope.layer, id: boxId, bidder_id: userId })
-        .single()
-
-    if (existing) return // 已存在，跳过
-
-    // 如果不存在，插入新记录
+    // 事件按顺序处理，直接插入（如果重复会由数据库约束处理）
     const bidderData = sanitizeForSupabase({
         network: scope.network,
         layer: scope.layer,

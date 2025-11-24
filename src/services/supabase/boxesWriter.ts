@@ -6,35 +6,7 @@ import { getSupabaseClient } from '../../config/supabase'
 import { getEventArg } from './eventArgs'
 import { sanitizeForSupabase, getEventArgAsString, hasEventArg } from './utils'
 import type { DecodedRuntimeEvent } from '../../oasisQuery/app/services/events'
-
-/**
- * 从事件中提取时间戳
- * 优先使用事件的 round（区块号）作为时间戳，如果没有则使用当前时间戳
- */
-const extractTimestamp = (event: DecodedRuntimeEvent<Record<string, unknown>>): string => {
-    // 优先使用 round（区块号）作为时间戳
-    const round = event.raw.round
-    if (round !== undefined && round !== null) {
-        return String(round)
-    }
-    
-    // 如果没有 round，尝试从 timestamp 字符串解析
-    const timestampStr = event.raw.timestamp
-    if (timestampStr) {
-        try {
-            // timestamp 是 ISO 8601 格式字符串，转换为 Unix 时间戳（秒）
-            const date = new Date(timestampStr)
-            const unixTimestamp = Math.floor(date.getTime() / 1000)
-            return String(unixTimestamp)
-        } catch {
-            // 解析失败，使用当前时间戳
-            return String(Math.floor(Date.now() / 1000))
-        }
-    }
-    
-    // 如果都没有，使用当前时间戳
-    return String(Math.floor(Date.now() / 1000))
-}
+import { extractTimestamp } from '../../utils/extractTimestamp'
 
 /**
  * 处理 BoxCreated 事件，创建 boxes 记录
@@ -53,15 +25,6 @@ const handleBoxCreated = async (
     if (boxId === undefined || userId === undefined) return
 
     const supabase = getSupabaseClient()
-
-    // 检查是否已存在
-    const { data: existing } = await supabase
-        .from('boxes')
-        .select('id')
-        .match({ network: scope.network, layer: scope.layer, id: boxId })
-        .single()
-
-    if (existing) return // 已存在，跳过
 
     // 从事件中提取时间戳
     const createTimestamp = extractTimestamp(event)
@@ -171,54 +134,9 @@ const handleBoxUpdate = async (
 }
 
 /**
- * 确保 box 记录存在（如果不存在则创建）
- */
-const ensureBoxExists = async (
-    scope: RuntimeScope,
-    boxId: string,
-    event: DecodedRuntimeEvent<Record<string, unknown>>,
-) => {
-    const supabase = getSupabaseClient()
-    
-    // 检查是否已存在
-    const { data: existing } = await supabase
-        .from('boxes')
-        .select('id')
-        .match({ network: scope.network, layer: scope.layer, id: boxId })
-        .single()
-
-    if (existing) return // 已存在，跳过
-
-    // 如果不存在，尝试创建（使用事件中的信息）
-    // 如果没有 userId，使用默认值
-    const userId = getEventArgAsString(event, 'userId') ?? '0'
-    const createTimestamp = extractTimestamp(event)
-
-    // 注意：根据 supabase.config.ts，box_info_cid 是必填字段（可以是 null）
-    const boxDataToInsert = {
-        network: scope.network,
-        layer: scope.layer,
-        id: boxId,
-        token_id: boxId,
-        minter_id: userId,
-        owner_address: '0x0000000000000000000000000000000000000000',
-        status: 'Storing',
-        price: '0',
-        deadline: '0',
-        create_timestamp: createTimestamp,
-        box_info_cid: null, // 必填字段，默认为 null
-    }
-    // 清理对象，确保没有 BigInt
-    const sanitizedBoxDataToInsert = sanitizeForSupabase(boxDataToInsert) as Record<string, unknown>
-    const { error } = await supabase.from('boxes').insert(sanitizedBoxDataToInsert)
-
-    if (error) {
-        console.warn(`⚠️  Failed to ensure box ${boxId} exists:`, error.message)
-    }
-}
-
-/**
  * 处理所有事件，确保 boxes 记录存在
+ * 注意：事件是按顺序处理的，不需要检查记录是否存在
+ * 优化：优先处理所有 BoxCreated 事件，然后再处理其他更新事件
  */
 export const ensureBoxesExist = async (
     scope: RuntimeScope,
@@ -227,20 +145,23 @@ export const ensureBoxesExist = async (
 ) => {
     if (contract !== ContractName.TRUTH_BOX) return // 只处理 TruthBox 合约
 
+    // 第一步：优先处理所有 BoxCreated 事件（创建新记录）
     for (const event of fetchResult.events) {
-        // 使用通用工具安全地提取事件参数（正确处理 0 值）
-        const boxId = getEventArgAsString(event, 'boxId')
-        if (!boxId) continue
-
-        // 先处理 BoxCreated（创建新记录）
         if (event.eventName === 'BoxCreated') {
-            await handleBoxCreated(scope, event)
-        } else {
-            // 对于其他事件，确保 box 记录存在（如果不存在则创建）
-            await ensureBoxExists(scope, boxId, event)
+            const boxId = getEventArgAsString(event, 'boxId')
+            if (boxId) {
+                await handleBoxCreated(scope, event)
+            }
         }
+    }
 
-        // 然后处理其他更新事件
-        await handleBoxUpdate(scope, event)
+    // 第二步：处理其他更新事件（此时所有 box 记录应该已经存在）
+    for (const event of fetchResult.events) {
+        if (event.eventName !== 'BoxCreated') {
+            const boxId = getEventArgAsString(event, 'boxId')
+            if (boxId) {
+                await handleBoxUpdate(scope, event)
+            }
+        }
     }
 }

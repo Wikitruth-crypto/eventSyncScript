@@ -55,7 +55,7 @@ const handleBlacklist = async (
 /**
  * 处理 UserId 合约事件并写入 Supabase
  */
-export const persistUserIdSync = async (
+export const persistUserAddressSync = async (
     scope: RuntimeScope,
     contract: ContractName,
     syncResult: RuntimeContractSyncResult,

@@ -12,6 +12,7 @@ async function main() {
     // Step 1：从 Supabase 中获取所需要的数据
     const currentSupabaseData = await getCurrentSupabaseData(DEFAULT_SCOPE)
     const last_synced_block = currentSupabaseData?.last_synced_block
+    // const last_synced_block = 14458354 // 重新开始同步
     console.log('last_synced_block:', last_synced_block)
 
     // Step 2：Fetch TruthBox events(TruthBox)

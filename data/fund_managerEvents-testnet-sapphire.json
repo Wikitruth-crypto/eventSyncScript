@@ -1,0 +1,20 @@
+{
+  "fetchedAt": "2025-11-24T03:03:19.268Z",
+  "scope": {
+    "network": "testnet",
+    "layer": "sapphire"
+  },
+  "contract": "FUND_MANAGER",
+  "cursorBefore": {
+    "lastBlock": 14484061,
+    "lastTimestamp": "2025-11-21T15:12:40+00:00"
+  },
+  "cursorAfter": {
+    "lastBlock": 14484061,
+    "lastTimestamp": "2025-11-21T15:12:40+00:00"
+  },
+  "pagesFetched": 0,
+  "totalFetched": 0,
+  "eventCount": 0,
+  "rawEvents": []
+}

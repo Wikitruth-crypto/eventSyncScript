@@ -1,0 +1,392 @@
+{
+  "fetchedAt": "2025-11-24T03:03:17.523Z",
+  "scope": {
+    "network": "testnet",
+    "layer": "sapphire"
+  },
+  "contract": "TRUTH_NFT",
+  "cursorBefore": {
+    "lastBlock": 14484061,
+    "lastTimestamp": "2025-11-21T15:12:40+00:00"
+  },
+  "cursorAfter": {
+    "lastBlock": 14484061,
+    "lastLogIndex": 0,
+    "lastTimestamp": "2025-11-21T15:12:40Z",
+    "lastEventId": "5eec6a567f1dbc46b656607a156a51c4d84b59135805610b9cd300ab50b8f998"
+  },
+  "pagesFetched": 1,
+  "totalFetched": 9,
+  "eventCount": 9,
+  "rawEvents": [
+    {
+      "body": {
+        "address": "SZTGSrxqe65yw7WBM/iqq03xy+c=",
+        "data": "",
+        "topics": [
+          "3fJSrRviyJtpwrBo/DeNqpUrp/FjxKEWKPVaTfUjs+8=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAATIz+B4pbmJzqSzMBlyRs7YJ2TGM=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAg="
+        ]
+      },
+      "eth_tx_hash": "4c5aff7c80a8bd8ed97276dbc36ff82de515283bd23557464a86e0170c797c48",
+      "evm_log_name": "Transfer",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "from",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "to",
+          "value": "0x4c8cfe078a5b989cea4b330197246ced82764c63"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "tokenID",
+          "value": "8"
+        }
+      ],
+      "evm_token": {
+        "decimals": 0,
+        "symbol": "",
+        "type": "ERC721"
+      },
+      "round": 14484061,
+      "timestamp": "2025-11-21T15:12:40Z",
+      "tx_hash": "5eec6a567f1dbc46b656607a156a51c4d84b59135805610b9cd300ab50b8f998",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "SZTGSrxqe65yw7WBM/iqq03xy+c=",
+        "data": "",
+        "topics": [
+          "3fJSrRviyJtpwrBo/DeNqpUrp/FjxKEWKPVaTfUjs+8=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAA3gspVmmp/ZPV8o2eyF5A9Mtpe64=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAc="
+        ]
+      },
+      "eth_tx_hash": "ca073fa9d883948f8cba103c2434ebfb5962c46c6b7bd35d0b5e7ac419d7dce7",
+      "evm_log_name": "Transfer",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "from",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "to",
+          "value": "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "tokenID",
+          "value": "7"
+        }
+      ],
+      "evm_token": {
+        "decimals": 0,
+        "symbol": "",
+        "type": "ERC721"
+      },
+      "round": 14484057,
+      "timestamp": "2025-11-21T15:12:18Z",
+      "tx_hash": "3049859b77d2b2d80b45fee2f4b6f53bf90d3fe96930ff0e5443687f33a641b3",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "SZTGSrxqe65yw7WBM/iqq03xy+c=",
+        "data": "",
+        "topics": [
+          "3fJSrRviyJtpwrBo/DeNqpUrp/FjxKEWKPVaTfUjs+8=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAixZ0phfxA4l/uC7GuOt0m6C5dls=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY="
+        ]
+      },
+      "eth_tx_hash": "dce9356158da794ade33a354d9941936b632e2e1b468fe6ab74c23c9120c2a94",
+      "evm_log_name": "Transfer",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "from",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "to",
+          "value": "0x8b1674a617f103897fb82ec6b8eb749ba0b9765b"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "tokenID",
+          "value": "6"
+        }
+      ],
+      "evm_token": {
+        "decimals": 0,
+        "symbol": "",
+        "type": "ERC721"
+      },
+      "round": 14484053,
+      "timestamp": "2025-11-21T15:11:55Z",
+      "tx_hash": "90f5bb1838c29bf31d1d8dea82a885ef4e54e08865b599b3ed4264bf86541fe2",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "SZTGSrxqe65yw7WBM/iqq03xy+c=",
+        "data": "",
+        "topics": [
+          "3fJSrRviyJtpwrBo/DeNqpUrp/FjxKEWKPVaTfUjs+8=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAQvkTTp079+7h+KWsKkMosFnnRow=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU="
+        ]
+      },
+      "eth_tx_hash": "0983fcf5fcc8efd5819d6590a68897279e283003edf50c67120084b1419090c9",
+      "evm_log_name": "Transfer",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "from",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "to",
+          "value": "0x42f9134e9d3bf7eee1f8a5ac2a4328b059e7468c"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "tokenID",
+          "value": "5"
+        }
+      ],
+      "evm_token": {
+        "decimals": 0,
+        "symbol": "",
+        "type": "ERC721"
+      },
+      "round": 14484049,
+      "timestamp": "2025-11-21T15:11:26Z",
+      "tx_hash": "ee065fe4335fe4d26268c5c1f76b1f720aacad0610945417e548afc8321f02ca",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "SZTGSrxqe65yw7WBM/iqq03xy+c=",
+        "data": "",
+        "topics": [
+          "3fJSrRviyJtpwrBo/DeNqpUrp/FjxKEWKPVaTfUjs+8=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAV368XelD41zfnstbvh99fLbHxkc=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ="
+        ]
+      },
+      "eth_tx_hash": "e8ceb98f6924012811babde995e5fededf76a7bb4ded6b249b033f0d89ca9459",
+      "evm_log_name": "Transfer",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "from",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "to",
+          "value": "0x577ebc5de943e35cdf9ecb5bbe1f7d7cb6c7c647"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "tokenID",
+          "value": "4"
+        }
+      ],
+      "evm_token": {
+        "decimals": 0,
+        "symbol": "",
+        "type": "ERC721"
+      },
+      "round": 14484046,
+      "timestamp": "2025-11-21T15:11:09Z",
+      "tx_hash": "2467b15f7514015ef55d6024f50845b6618beede0e50d0423c7079e9c562b845",
+      "tx_index": 1,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "SZTGSrxqe65yw7WBM/iqq03xy+c=",
+        "data": "",
+        "topics": [
+          "3fJSrRviyJtpwrBo/DeNqpUrp/FjxKEWKPVaTfUjs+8=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAhNNPT4OodZbNP7aIfP+PF79ae4M=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM="
+        ]
+      },
+      "eth_tx_hash": "bfb57426dbf5e1c3c30284db051528e88079c94b22c3aaa4b18223a59844d684",
+      "evm_log_name": "Transfer",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "from",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "to",
+          "value": "0x84d34f4f83a87596cd3fb6887cff8f17bf5a7b83"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "tokenID",
+          "value": "3"
+        }
+      ],
+      "evm_token": {
+        "decimals": 0,
+        "symbol": "",
+        "type": "ERC721"
+      },
+      "round": 14484041,
+      "timestamp": "2025-11-21T15:10:41Z",
+      "tx_hash": "762c4c2e760b9371c250f8c0d3582a5fe486ad895c9112da86464876a8f0b7c6",
+      "tx_index": 1,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "SZTGSrxqe65yw7WBM/iqq03xy+c=",
+        "data": "",
+        "topics": [
+          "3fJSrRviyJtpwrBo/DeNqpUrp/FjxKEWKPVaTfUjs+8=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAIghmsaIhn0DnL1xii2XVQmjKOp0=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI="
+        ]
+      },
+      "eth_tx_hash": "0a5a830178314cb98e704dca3e92f12ab61b12fdc86b6e9555d2ffc95e579c07",
+      "evm_log_name": "Transfer",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "from",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "to",
+          "value": "0x220866b1a2219f40e72f5c628b65d54268ca3a9d"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "tokenID",
+          "value": "2"
+        }
+      ],
+      "evm_token": {
+        "decimals": 0,
+        "symbol": "",
+        "type": "ERC721"
+      },
+      "round": 14484037,
+      "timestamp": "2025-11-21T15:10:18Z",
+      "tx_hash": "d60de9bac711675c5c42a79be6bccb8b7545d75e860f600bbea6d8f2161e8926",
+      "tx_index": 1,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "SZTGSrxqe65yw7WBM/iqq03xy+c=",
+        "data": "",
+        "topics": [
+          "3fJSrRviyJtpwrBo/DeNqpUrp/FjxKEWKPVaTfUjs+8=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAsgv21/YAWd1d5G8/DzJmWiWepsA=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE="
+        ]
+      },
+      "eth_tx_hash": "729d85f776527026bda9ebb4780889606375c5758f226d5df18d2eff46f7ec3f",
+      "evm_log_name": "Transfer",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "from",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "to",
+          "value": "0xb20bf6d7f60059dd5de46f3f0f32665a259ea6c0"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "tokenID",
+          "value": "1"
+        }
+      ],
+      "evm_token": {
+        "decimals": 0,
+        "symbol": "",
+        "type": "ERC721"
+      },
+      "round": 14484034,
+      "timestamp": "2025-11-21T15:09:55Z",
+      "tx_hash": "777172dd777fcb7bd53c585f587d71ef380e1f54ee1807758fbb61854b64f42f",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "SZTGSrxqe65yw7WBM/iqq03xy+c=",
+        "data": "",
+        "topics": [
+          "3fJSrRviyJtpwrBo/DeNqpUrp/FjxKEWKPVaTfUjs+8=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAA2Npr8mlkr51+7Z4D5TQV03qpYEU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+        ]
+      },
+      "eth_tx_hash": "8ce5099cfedc38682f5a3145c740f984342e888a35feec92a1ad59f330bb1e33",
+      "evm_log_name": "Transfer",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "from",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "to",
+          "value": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "tokenID",
+          "value": "0"
+        }
+      ],
+      "evm_token": {
+        "decimals": 0,
+        "symbol": "",
+        "type": "ERC721"
+      },
+      "round": 14484030,
+      "timestamp": "2025-11-21T15:09:32Z",
+      "tx_hash": "803ae0f9a942abec78c7a49bb9627cde8d56d5c0a2d1c17e6fa14daf9a9be97f",
+      "tx_index": 1,
+      "type": "evm.log"
+    }
+  ]
+}

@@ -52,7 +52,7 @@
      - `SUPABASE_SERVICE_ROLE_KEY`: Supabase Service Role Key
 
 2. **工作流会自动运行**
-   - 定时触发：每小时整点（UTC 时间）
+   - 定时触发：每5分钟
    - 手动触发：在 GitHub Actions 页面点击 "Run workflow"
 
 ## 环境变量配置

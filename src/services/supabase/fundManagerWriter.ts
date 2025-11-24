@@ -9,27 +9,7 @@ import { getEventArgAsString, sanitizeForSupabase } from './utils'
 import { getEventArg } from './eventArgs'
 import { normalizeHash } from './eventArgs'
 import type { DecodedRuntimeEvent } from '../../oasisQuery/app/services/events'
-
-/**
- * 从事件中提取时间戳
- */
-const extractTimestamp = (event: DecodedRuntimeEvent<Record<string, unknown>>): string => {
-    const round = event.raw.round
-    if (round !== undefined && round !== null) {
-        return String(round)
-    }
-    const timestampStr = event.raw.timestamp
-    if (timestampStr) {
-        try {
-            const date = new Date(timestampStr)
-            const unixTimestamp = Math.floor(date.getTime() / 1000)
-            return String(unixTimestamp)
-        } catch {
-            return String(Math.floor(Date.now() / 1000))
-        }
-    }
-    return String(Math.floor(Date.now() / 1000))
-}
+import { extractTimestamp } from '../../utils/extractTimestamp'
 
 /**
  * 生成记录 ID：transaction_hash-log_index

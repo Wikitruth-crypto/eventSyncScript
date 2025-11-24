@@ -6,38 +6,8 @@ import { sanitizeForSupabase, getEventArgAsString } from './utils'
 import type { DecodedRuntimeEvent } from '../../oasisQuery/app/services/events'
 
 /**
- * 创建或更新用户记录
- * 注意：users 表只包含 network, layer, id 字段，没有其他数据，直接使用 upsert
- */
-const ensureUserExists = async (
-    scope: RuntimeScope,
-    userId: string,
-) => {
-    if (!userId) return
-
-    const supabase = getSupabaseClient()
-    
-    // 直接使用 upsert，即使已存在也不会报错
-    const userData = {
-        network: scope.network,
-        layer: scope.layer,
-        id: userId,
-    }
-    // 清理对象，确保没有 BigInt
-    const sanitizedUserData = sanitizeForSupabase(userData) as Record<string, unknown>
-    const { error } = await supabase
-        .from('users')
-        .upsert(sanitizedUserData, {
-            onConflict: 'network,layer,id',
-        })
-
-    if (error) {
-        console.warn(`⚠️  Failed to upsert user ${userId}:`, error.message)
-    }
-}
-
-/**
  * 处理所有事件，确保 users 记录存在
+ * 注意：事件按顺序处理，使用批量 upsert 提高性能
  */
 export const ensureUsersExist = async (
     scope: RuntimeScope,
@@ -53,9 +23,30 @@ export const ensureUsersExist = async (
         }
     }
 
-    // 为每个 userId 确保记录存在
-    for (const userId of userIds) {
-        await ensureUserExists(scope, userId)
+    if (userIds.size === 0) return
+
+    const supabase = getSupabaseClient()
+    
+    // 批量 upsert，避免多次查询
+    const userRecords = Array.from(userIds).map(userId => ({
+        network: scope.network,
+        layer: scope.layer,
+        id: userId,
+    }))
+    
+    // 清理对象，确保没有 BigInt
+    const sanitizedUserRecords = userRecords.map(record => 
+        sanitizeForSupabase(record) as Record<string, unknown>
+    )
+    
+    const { error } = await supabase
+        .from('users')
+        .upsert(sanitizedUserRecords, {
+            onConflict: 'network,layer,id',
+        })
+
+    if (error) {
+        console.warn(`⚠️  Failed to upsert users:`, error.message)
     }
 }
 
