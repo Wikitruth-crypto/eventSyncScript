@@ -59,6 +59,8 @@ const handleBoxCreated = async (
 
     if (error) {
         console.warn(`⚠️  Failed to create box ${boxId}:`, error.message)
+    } else {
+        console.log('Insert success:', event)
     }
 }
 
