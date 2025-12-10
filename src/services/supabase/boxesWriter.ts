@@ -11,6 +11,7 @@ import { extractTimestamp } from '../../utils/extractTimestamp'
 /**
  * 处理 BoxCreated 事件，创建 boxes 记录
  * 支持旧合约（两个参数）和新合约（三个参数，包含 boxInfoCID）
+ * 使用 upsert 避免重复键错误（如果 box 已存在则更新）
  */
 const handleBoxCreated = async (
     scope: RuntimeScope,
@@ -55,12 +56,18 @@ const handleBoxCreated = async (
 
     // 清理整个对象，确保没有 BigInt
     const sanitizedBoxData = sanitizeForSupabase(boxData) as Record<string, unknown>
-    const { error } = await supabase.from('boxes').insert(sanitizedBoxData)
+    
+    // 使用 upsert 避免重复键错误（如果 box 已存在则更新，否则插入）
+    const { error } = await supabase
+        .from('boxes')
+        .upsert(sanitizedBoxData, {
+            onConflict: 'network,layer,id', // 根据主键冲突处理
+        })
 
     if (error) {
-        console.warn(`⚠️  Failed to create box ${boxId}:`, error.message)
+        console.warn(`⚠️  Failed to upsert box ${boxId}:`, error.message)
     } else {
-        console.log('Insert success:', event)
+        console.log(`✅ Upserted box ${boxId}`)
     }
 }
 
@@ -73,7 +80,8 @@ const handleBoxUpdate = async (
 ) => {
     // 使用通用工具安全地提取事件参数（正确处理 0 值）
     const boxId = getEventArgAsString(event, 'boxId')
-    if (!boxId) return
+    // 只有当 boxId 不存在（undefined）时才跳过（'0' 是有效值）
+    if (boxId === undefined) return
 
     const supabase = getSupabaseClient()
     const updates: Record<string, unknown> = {}
@@ -108,6 +116,8 @@ const handleBoxUpdate = async (
             const deadline = getEventArgAsString(event, 'deadline')
             if (deadline !== undefined) {
                 updates.deadline = deadline
+            } else {
+                console.warn(`⚠️  DeadlineChanged event for box ${boxId} has undefined deadline`)
             }
             break
 
@@ -130,8 +140,10 @@ const handleBoxUpdate = async (
             .match({ network: scope.network, layer: scope.layer, id: boxId })
 
         if (error) {
-            console.warn(`⚠️  Failed to update box ${boxId}:`, error.message)
-        }
+            console.warn(`⚠️  Failed to update box ${boxId} (${event.eventName}):`, error.message)
+        } 
+    } else {
+        console.warn(`⚠️  No updates to apply for box ${boxId} (${event.eventName})`)
     }
 }
 
@@ -139,6 +151,9 @@ const handleBoxUpdate = async (
  * 处理所有事件，确保 boxes 记录存在
  * 注意：事件是按顺序处理的，不需要检查记录是否存在
  * 优化：优先处理所有 BoxCreated 事件，然后再处理其他更新事件
+ * 
+ * 重要：区块链API返回的事件是最新的在前，需要反转数组确保最旧的事件先写入，
+ * 最新的事件最后写入，这样才能保证数据库中的最终状态是正确的
  */
 export const ensureBoxesExist = async (
     scope: RuntimeScope,
@@ -147,8 +162,12 @@ export const ensureBoxesExist = async (
 ) => {
     if (contract !== ContractName.TRUTH_BOX) return // 只处理 TruthBox 合约
 
+    // 反转事件数组：区块链API返回的是最新的在前，我们需要最旧的在前面
+    // 这样确保最新的事件数据最后写入，覆盖之前的值
+    const reversedEvents = [...fetchResult.events].reverse()
+
     // 第一步：优先处理所有 BoxCreated 事件（创建新记录）
-    for (const event of fetchResult.events) {
+    for (const event of reversedEvents) {
         if (event.eventName === 'BoxCreated') {
             const boxId = getEventArgAsString(event, 'boxId')
             if (boxId) {
@@ -158,7 +177,7 @@ export const ensureBoxesExist = async (
     }
 
     // 第二步：处理其他更新事件（此时所有 box 记录应该已经存在）
-    for (const event of fetchResult.events) {
+    for (const event of reversedEvents) {
         if (event.eventName !== 'BoxCreated') {
             const boxId = getEventArgAsString(event, 'boxId')
             if (boxId) {

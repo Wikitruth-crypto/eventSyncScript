@@ -67,8 +67,12 @@ export const persistUserAddressSync = async (
 
     if (contract !== ContractName.USER_ID) return // 只处理 UserId 合约
 
+    // 反转事件数组：区块链API返回的是最新的在前，我们需要最旧的在前面
+    // 这样确保最新的事件数据最后写入，覆盖之前的值（例如 is_blacklisted）
+    const reversedEvents = [...syncResult.fetchResult.events].reverse()
+
     // 处理所有 Blacklist 事件
-    for (const event of syncResult.fetchResult.events) {
+    for (const event of reversedEvents) {
         if (event.eventName === 'Blacklist') {
             await handleBlacklist(scope, event)
         }

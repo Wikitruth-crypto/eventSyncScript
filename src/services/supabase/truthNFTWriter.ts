@@ -81,8 +81,12 @@ export const persistTruthNFTSync = async (
 
   if (contract !== ContractName.TRUTH_NFT) return // 只处理 TruthNFT 合约
 
+  // 反转事件数组：区块链API返回的是最新的在前，我们需要最旧的在前面
+  // 这样确保最新的事件数据最后写入，覆盖之前的值（例如 owner_address）
+  const reversedEvents = [...syncResult.fetchResult.events].reverse()
+
   // 处理所有 Transfer 事件
-  for (const event of syncResult.fetchResult.events) {
+  for (const event of reversedEvents) {
     if (event.eventName === 'Transfer') {
       await handleTransfer(scope, event)
     }

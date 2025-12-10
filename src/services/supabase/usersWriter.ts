@@ -8,6 +8,9 @@ import type { DecodedRuntimeEvent } from '../../oasisQuery/app/services/events'
 /**
  * 处理所有事件，确保 users 记录存在
  * 注意：事件按顺序处理，使用批量 upsert 提高性能
+ * 
+ * 重要：虽然这里只是收集 userId，但为了保持一致性，我们也反转事件数组
+ * 区块链API返回的事件是最新的在前
  */
 export const ensureUsersExist = async (
     scope: RuntimeScope,
@@ -15,8 +18,11 @@ export const ensureUsersExist = async (
 ) => {
     const userIds = new Set<string>()
 
+    // 反转事件数组：区块链API返回的是最新的在前
+    const reversedEvents = [...fetchResult.events].reverse()
+
     // 收集所有事件中的 userId（使用通用工具，正确处理 0 值）
-    for (const event of fetchResult.events) {
+    for (const event of reversedEvents) {
         const userId = getEventArgAsString(event, 'userId')
         if (userId) {
             userIds.add(userId)

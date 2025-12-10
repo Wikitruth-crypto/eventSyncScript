@@ -107,7 +107,11 @@ export const upsertMetadataFromEvents = async (
   scope: RuntimeScope,
   events: DecodedRuntimeEvent<Record<string, unknown>>[],
 ) => {
-  const targets = events
+  // 反转事件数组：区块链API返回的是最新的在前，我们需要最旧的在前面
+  // 这样确保最新的 metadata 最后写入，覆盖之前的值
+  const reversedEvents = [...events].reverse()
+  
+  const targets = reversedEvents
     .map(event => {
       const { boxId, boxInfoCID } = extractBoxInfoCid(event)
       const cid = sanitizeCid(boxInfoCID)

@@ -1,13 +1,6 @@
 import { ContractName } from '../types';
 
-/**
- * 事件签名配置
- * 每个合约对应的事件签名列表（用于解码事件）
- * 
- * 注意：
- * - 用于解码时，需要包含完整的 Solidity 事件声明格式（包含 indexed 关键字和参数名）
- * - 用于 Nexus API 查询时，需要去除 indexed 关键字和参数名，只保留类型
- */
+
 export const CONTRACT_EVENT_SIGNATURES: Record<ContractName, string[]> = {
     [ContractName.EXCHANGE]: [
         'event BoxListed(uint256 indexed boxId, uint256 indexed userId, address acceptedToken)',
@@ -27,17 +20,8 @@ export const CONTRACT_EVENT_SIGNATURES: Record<ContractName, string[]> = {
         'event MinterRewardsWithdraw(uint256 indexed userId, address indexed token, uint256 amount)',
     ],
 
-    // TruthBox 合约事件
-    // 注意：同时支持旧合约和新合约的事件签名
-    // 旧合约：BoxCreated(uint256 indexed boxId, uint256 indexed userId) + BoxInfoChanged(uint256 indexed boxId, string boxInfoCID)
-    // 新合约：BoxCreated(uint256 indexed boxId, uint256 indexed userId, string boxInfoCID)
     [ContractName.TRUTH_BOX]: [
-        // 新合约事件（代理合约）
         'event BoxCreated(uint256 indexed boxId, uint256 indexed userId, string boxInfoCID)',
-        // 旧合约事件（兼容旧数据）
-        'event BoxCreated(uint256 indexed boxId, uint256 indexed userId)',
-        'event BoxInfoChanged(uint256 indexed boxId, string boxInfoCID)',
-        // 通用事件
         'event BoxStatusChanged(uint256 indexed boxId, uint8 status)',
         'event PriceChanged(uint256 indexed boxId, uint256 price)',
         'event DeadlineChanged(uint256 indexed boxId, uint256 deadline)',

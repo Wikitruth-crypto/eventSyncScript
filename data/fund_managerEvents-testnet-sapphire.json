@@ -1,20 +1,543 @@
 {
-  "fetchedAt": "2025-11-24T03:03:19.268Z",
+  "fetchedAt": "2025-12-10T10:34:39.841Z",
   "scope": {
     "network": "testnet",
     "layer": "sapphire"
   },
   "contract": "FUND_MANAGER",
   "cursorBefore": {
-    "lastBlock": 14484061,
-    "lastTimestamp": "2025-11-21T15:12:40+00:00"
+    "lastBlock": 14750501,
+    "lastTimestamp": "2025-12-10T04:22:40+00:00"
   },
   "cursorAfter": {
-    "lastBlock": 14484061,
-    "lastTimestamp": "2025-11-21T15:12:40+00:00"
+    "lastBlock": 14750501,
+    "lastLogIndex": 0,
+    "lastTimestamp": "2025-12-10T02:21:49Z",
+    "lastEventId": "86c04df071205352607e5afe59c65ee3a5135298622479283f71a290880daa4a"
   },
-  "pagesFetched": 0,
+  "pagesFetched": 1,
   "totalFetched": 0,
-  "eventCount": 0,
-  "rawEvents": []
+  "eventCount": 13,
+  "rawEvents": [
+    {
+      "body": {
+        "address": "mQ3kAc0BA6AQfSf4IoPbYPSEQgM=",
+        "data": "//////////////////////////////////////////8=",
+        "topics": [
+          "jFvh5evsfVvRT3FCfR6E890DFMD3sikeWyAKyMfDuSU=",
+          "AAAAAAAAAAAAAAAAbBitjUpJb1sAj8cmX9ZP5BkLIr8=",
+          "AAAAAAAAAAAAAAAAKP4MRelzComr3dTcgXtTL4Av4eM="
+        ]
+      },
+      "eth_tx_hash": "40d2424c93c01423fd5376a088604c619f209ea7556f814734e0e0990a62b3c0",
+      "evm_log_name": "Approval",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "owner",
+          "value": "0x6c18ad8d4a496f5b008fc7265fd64fe4190b22bf"
+        },
+        {
+          "evm_type": "address",
+          "name": "spender",
+          "value": "0x28fe0c45e9730a89abddd4dc817b532f802fe1e3"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "value",
+          "value": "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+        }
+      ],
+      "evm_token": {
+        "decimals": 18,
+        "symbol": "WTRC",
+        "type": "ERC20"
+      },
+      "round": 14749243,
+      "timestamp": "2025-12-10T02:21:49Z",
+      "tx_hash": "86c04df071205352607e5afe59c65ee3a5135298622479283f71a290880daa4a",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "RJ4s1h8DKK5o9KUwFwyJK0W0smk=",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABbjYA=",
+        "topics": [
+          "jFvh5evsfVvRT3FCfR6E890DFMD3sikeWyAKyMfDuSU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAKP4MRelzComr3dTcgXtTL4Av4eM="
+        ]
+      },
+      "eth_tx_hash": "10a275c00f22f232f7b6b3931859e3f0e6c49d1e1cd7e0fcce4cca0f43772618",
+      "evm_log_name": "Approval",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "owner",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "spender",
+          "value": "0x28fe0c45e9730a89abddd4dc817b532f802fe1e3"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "value",
+          "value": "6000000"
+        }
+      ],
+      "evm_token": {
+        "decimals": 18,
+        "symbol": "WTRC.S",
+        "type": "ERC20"
+      },
+      "round": 14562609,
+      "timestamp": "2025-11-27T01:38:31Z",
+      "tx_hash": "df30dee56d6c1b86591e0956b1d50afeac3cba0f34922403c851aa92e2de5198",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "RJ4s1h8DKK5o9KUwFwyJK0W0smk=",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABbjYA=",
+        "topics": [
+          "jFvh5evsfVvRT3FCfR6E890DFMD3sikeWyAKyMfDuSU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAKP4MRelzComr3dTcgXtTL4Av4eM="
+        ]
+      },
+      "eth_tx_hash": "0cd5a0476c87a796255715cd85fb37ffa2e86554f8fbd0e8c0c1f58a2d77e4e2",
+      "evm_log_name": "Approval",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "owner",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "spender",
+          "value": "0x28fe0c45e9730a89abddd4dc817b532f802fe1e3"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "value",
+          "value": "6000000"
+        }
+      ],
+      "evm_token": {
+        "decimals": 18,
+        "symbol": "WTRC.S",
+        "type": "ERC20"
+      },
+      "round": 14557160,
+      "timestamp": "2025-11-26T16:38:45Z",
+      "tx_hash": "050eadd1bbb7873f4bd6a6b66082b78b33ed2628742175c5640f64a0660f22d6",
+      "tx_index": 2,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "RJ4s1h8DKK5o9KUwFwyJK0W0smk=",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABbjYA=",
+        "topics": [
+          "jFvh5evsfVvRT3FCfR6E890DFMD3sikeWyAKyMfDuSU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAKP4MRelzComr3dTcgXtTL4Av4eM="
+        ]
+      },
+      "eth_tx_hash": "d33fb16524aa99c63cc88cf93b3de4179d0d97bb6ade9eee31a43a9cb7173aac",
+      "evm_log_name": "Approval",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "owner",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "spender",
+          "value": "0x28fe0c45e9730a89abddd4dc817b532f802fe1e3"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "value",
+          "value": "6000000"
+        }
+      ],
+      "evm_token": {
+        "decimals": 18,
+        "symbol": "WTRC.S",
+        "type": "ERC20"
+      },
+      "round": 14557065,
+      "timestamp": "2025-11-26T16:29:34Z",
+      "tx_hash": "e1645afd59a5d7dacebda4bbeff8ee9993e4537cd30ae1cf99bf0e9c8806ae0b",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "RJ4s1h8DKK5o9KUwFwyJK0W0smk=",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABbjYA=",
+        "topics": [
+          "jFvh5evsfVvRT3FCfR6E890DFMD3sikeWyAKyMfDuSU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAKP4MRelzComr3dTcgXtTL4Av4eM="
+        ]
+      },
+      "eth_tx_hash": "a7baacaeb94dd76a25b719b8953b010f22bc889c92014ea44d3654445706ba96",
+      "evm_log_name": "Approval",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "owner",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "spender",
+          "value": "0x28fe0c45e9730a89abddd4dc817b532f802fe1e3"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "value",
+          "value": "6000000"
+        }
+      ],
+      "evm_token": {
+        "decimals": 18,
+        "symbol": "WTRC.S",
+        "type": "ERC20"
+      },
+      "round": 14557034,
+      "timestamp": "2025-11-26T16:26:38Z",
+      "tx_hash": "cf41c7d0a50afe14623b8401dd84f407d8e74dc267c7a450a113ba56a43ea40b",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "RJ4s1h8DKK5o9KUwFwyJK0W0smk=",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABbjYA=",
+        "topics": [
+          "jFvh5evsfVvRT3FCfR6E890DFMD3sikeWyAKyMfDuSU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAKP4MRelzComr3dTcgXtTL4Av4eM="
+        ]
+      },
+      "eth_tx_hash": "cd6c1e6393ccfbf12e2497c9c0974a5481c89c12a8c08467349589fc3917f22a",
+      "evm_log_name": "Approval",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "owner",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "spender",
+          "value": "0x28fe0c45e9730a89abddd4dc817b532f802fe1e3"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "value",
+          "value": "6000000"
+        }
+      ],
+      "evm_token": {
+        "decimals": 18,
+        "symbol": "WTRC.S",
+        "type": "ERC20"
+      },
+      "round": 14556890,
+      "timestamp": "2025-11-26T16:12:32Z",
+      "tx_hash": "c330edeeff8bc6fa79ffaa0c9c555e20c8d809d82a3162cf9ab3241984e44197",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "RJ4s1h8DKK5o9KUwFwyJK0W0smk=",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABbjYA=",
+        "topics": [
+          "jFvh5evsfVvRT3FCfR6E890DFMD3sikeWyAKyMfDuSU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAKP4MRelzComr3dTcgXtTL4Av4eM="
+        ]
+      },
+      "eth_tx_hash": "a9afe6efad82a592da8932e5d88766de341a044d32a6ed7545189807bf0b7b91",
+      "evm_log_name": "Approval",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "owner",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "spender",
+          "value": "0x28fe0c45e9730a89abddd4dc817b532f802fe1e3"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "value",
+          "value": "6000000"
+        }
+      ],
+      "evm_token": {
+        "decimals": 18,
+        "symbol": "WTRC.S",
+        "type": "ERC20"
+      },
+      "round": 14556667,
+      "timestamp": "2025-11-26T15:51:12Z",
+      "tx_hash": "772a84071c4712fe1603a164d1180936a2be5d7c737bbe60f52b609bca9cbdbf",
+      "tx_index": 1,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "RJ4s1h8DKK5o9KUwFwyJK0W0smk=",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABbjYA=",
+        "topics": [
+          "jFvh5evsfVvRT3FCfR6E890DFMD3sikeWyAKyMfDuSU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAKP4MRelzComr3dTcgXtTL4Av4eM="
+        ]
+      },
+      "eth_tx_hash": "75c9d8dafe4649d155f2ab8e02608f49a6e8917fb0b1abe343bf062d0f779f73",
+      "evm_log_name": "Approval",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "owner",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "spender",
+          "value": "0x28fe0c45e9730a89abddd4dc817b532f802fe1e3"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "value",
+          "value": "6000000"
+        }
+      ],
+      "evm_token": {
+        "decimals": 18,
+        "symbol": "WTRC.S",
+        "type": "ERC20"
+      },
+      "round": 14556593,
+      "timestamp": "2025-11-26T15:44:00Z",
+      "tx_hash": "bf4641babe7f8e7ef9a4f5689739157a71bf4673510d44fd0c8e26c967ebd302",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "RJ4s1h8DKK5o9KUwFwyJK0W0smk=",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABbjYA=",
+        "topics": [
+          "jFvh5evsfVvRT3FCfR6E890DFMD3sikeWyAKyMfDuSU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAKP4MRelzComr3dTcgXtTL4Av4eM="
+        ]
+      },
+      "eth_tx_hash": "ac10b40360ea77004aa38f7dacff740b91d55b925588d6f29814e10000a766c8",
+      "evm_log_name": "Approval",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "owner",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "spender",
+          "value": "0x28fe0c45e9730a89abddd4dc817b532f802fe1e3"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "value",
+          "value": "6000000"
+        }
+      ],
+      "evm_token": {
+        "decimals": 18,
+        "symbol": "WTRC.S",
+        "type": "ERC20"
+      },
+      "round": 14556520,
+      "timestamp": "2025-11-26T15:36:41Z",
+      "tx_hash": "52202bd88519fc86d6bd4c7c8560f9150fdb90abdffc8d7abdc7e03f75c92abb",
+      "tx_index": 2,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "RJ4s1h8DKK5o9KUwFwyJK0W0smk=",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABMS0A=",
+        "topics": [
+          "jFvh5evsfVvRT3FCfR6E890DFMD3sikeWyAKyMfDuSU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAKP4MRelzComr3dTcgXtTL4Av4eM="
+        ]
+      },
+      "eth_tx_hash": "7081dd54cc24b61deed688dc2917ed5044080000358931a366ce260808234d75",
+      "evm_log_name": "Approval",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "owner",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "spender",
+          "value": "0x28fe0c45e9730a89abddd4dc817b532f802fe1e3"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "value",
+          "value": "5000000"
+        }
+      ],
+      "evm_token": {
+        "decimals": 18,
+        "symbol": "WTRC.S",
+        "type": "ERC20"
+      },
+      "round": 14556395,
+      "timestamp": "2025-11-26T15:24:18Z",
+      "tx_hash": "3ca3b8df3c06fb53998eff3e04d1feb524019484b91a5cd15346440e76ef66e2",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "RJ4s1h8DKK5o9KUwFwyJK0W0smk=",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA9CQA=",
+        "topics": [
+          "jFvh5evsfVvRT3FCfR6E890DFMD3sikeWyAKyMfDuSU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAKP4MRelzComr3dTcgXtTL4Av4eM="
+        ]
+      },
+      "eth_tx_hash": "180fd1b2c079bd6ed2819c59dddd4f71e602a67607adea024816ae7d0b8990b5",
+      "evm_log_name": "Approval",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "owner",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "spender",
+          "value": "0x28fe0c45e9730a89abddd4dc817b532f802fe1e3"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "value",
+          "value": "4000000"
+        }
+      ],
+      "evm_token": {
+        "decimals": 18,
+        "symbol": "WTRC.S",
+        "type": "ERC20"
+      },
+      "round": 14556301,
+      "timestamp": "2025-11-26T15:14:57Z",
+      "tx_hash": "f2abe908fb60b8f4c4774b559652264b6f2e43f4f6df5a39d10b5a9e955bf4d6",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "RJ4s1h8DKK5o9KUwFwyJK0W0smk=",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAtxsA=",
+        "topics": [
+          "jFvh5evsfVvRT3FCfR6E890DFMD3sikeWyAKyMfDuSU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAKP4MRelzComr3dTcgXtTL4Av4eM="
+        ]
+      },
+      "eth_tx_hash": "e232fd92d2c46fb04d8199dc855d90ed7a9a65fb05c2fc8930186dfc409ea760",
+      "evm_log_name": "Approval",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "owner",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "spender",
+          "value": "0x28fe0c45e9730a89abddd4dc817b532f802fe1e3"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "value",
+          "value": "3000000"
+        }
+      ],
+      "evm_token": {
+        "decimals": 18,
+        "symbol": "WTRC.S",
+        "type": "ERC20"
+      },
+      "round": 14542411,
+      "timestamp": "2025-11-25T15:50:35Z",
+      "tx_hash": "0e9982759cd80df49c794ff1f1072163d1cca4f3849c3a640bf0cdea1b144656",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "RJ4s1h8DKK5o9KUwFwyJK0W0smk=",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPQkA=",
+        "topics": [
+          "jFvh5evsfVvRT3FCfR6E890DFMD3sikeWyAKyMfDuSU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAKP4MRelzComr3dTcgXtTL4Av4eM="
+        ]
+      },
+      "eth_tx_hash": "2ecd6ba4840e0c5747405fd634a236147c964dfedf72ac319f475936af49f690",
+      "evm_log_name": "Approval",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "owner",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "spender",
+          "value": "0x28fe0c45e9730a89abddd4dc817b532f802fe1e3"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "value",
+          "value": "1000000"
+        }
+      ],
+      "evm_token": {
+        "decimals": 18,
+        "symbol": "WTRC.S",
+        "type": "ERC20"
+      },
+      "round": 14542309,
+      "timestamp": "2025-11-25T15:39:36Z",
+      "tx_hash": "9eb1083cd7e9cab34f6f204301d391978128ebc5de7d2b7a121872578b317e8a",
+      "tx_index": 0,
+      "type": "evm.log"
+    }
+  ]
 }

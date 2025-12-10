@@ -288,8 +288,12 @@ export const persistFundManagerSync = async (
     // ✅ 先确保 users 记录存在
     await ensureUsersExist(scope, syncResult.fetchResult)
 
+    // 反转事件数组：区块链API返回的是最新的在前，我们需要最旧的在前面
+    // 这样确保最新的事件数据最后写入，覆盖之前的值
+    const reversedEvents = [...syncResult.fetchResult.events].reverse()
+
     // 处理各个事件
-    for (const event of syncResult.fetchResult.events) {
+    for (const event of reversedEvents) {
         switch (event.eventName) {
             case 'OrderAmountPaid':
                 await handleOrderAmountPaid(scope, event)

@@ -1,17 +1,17 @@
 {
-  "fetchedAt": "2025-11-24T03:03:20.802Z",
+  "fetchedAt": "2025-12-10T10:34:40.804Z",
   "scope": {
     "network": "testnet",
     "layer": "sapphire"
   },
   "contract": "USER_ID",
   "cursorBefore": {
-    "lastBlock": 14484061,
-    "lastTimestamp": "2025-11-21T15:12:40+00:00"
+    "lastBlock": 14750501,
+    "lastTimestamp": "2025-12-10T02:21:49+00:00"
   },
   "cursorAfter": {
-    "lastBlock": 14484061,
-    "lastTimestamp": "2025-11-21T15:12:40+00:00"
+    "lastBlock": 14750501,
+    "lastTimestamp": "2025-12-10T02:21:49+00:00"
   },
   "pagesFetched": 0,
   "totalFetched": 0,

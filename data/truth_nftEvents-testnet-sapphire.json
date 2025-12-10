@@ -1,24 +1,65 @@
 {
-  "fetchedAt": "2025-11-24T03:03:17.523Z",
+  "fetchedAt": "2025-12-10T10:34:35.343Z",
   "scope": {
     "network": "testnet",
     "layer": "sapphire"
   },
   "contract": "TRUTH_NFT",
   "cursorBefore": {
-    "lastBlock": 14484061,
-    "lastTimestamp": "2025-11-21T15:12:40+00:00"
+    "lastBlock": 14750501,
+    "lastTimestamp": "2025-12-10T04:22:40+00:00"
   },
   "cursorAfter": {
-    "lastBlock": 14484061,
+    "lastBlock": 14750501,
     "lastLogIndex": 0,
-    "lastTimestamp": "2025-11-21T15:12:40Z",
-    "lastEventId": "5eec6a567f1dbc46b656607a156a51c4d84b59135805610b9cd300ab50b8f998"
+    "lastTimestamp": "2025-12-09T08:38:01Z",
+    "lastEventId": "9a29b1901e5d09f95a264ae5e18f610781d6fe3d5d82c127885d585e7d235850"
   },
   "pagesFetched": 1,
-  "totalFetched": 9,
-  "eventCount": 9,
+  "totalFetched": 10,
+  "eventCount": 10,
   "rawEvents": [
+    {
+      "body": {
+        "address": "SZTGSrxqe65yw7WBM/iqq03xy+c=",
+        "data": "",
+        "topics": [
+          "3fJSrRviyJtpwrBo/DeNqpUrp/FjxKEWKPVaTfUjs+8=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAV/9GGJ9BTEwVPuDQbHNh2jy6his=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAk="
+        ]
+      },
+      "eth_tx_hash": "09b1adc4258f57f21e58568ac0a5316bc311f77c77b1bc54bee904b5119d986d",
+      "evm_log_name": "Transfer",
+      "evm_log_params": [
+        {
+          "evm_type": "address",
+          "name": "from",
+          "value": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "evm_type": "address",
+          "name": "to",
+          "value": "0x57ff46189f414c4c153ee0d06c7361da3cba862b"
+        },
+        {
+          "evm_type": "uint256",
+          "name": "tokenID",
+          "value": "9"
+        }
+      ],
+      "evm_token": {
+        "decimals": 0,
+        "symbol": "",
+        "type": "ERC721"
+      },
+      "round": 14738479,
+      "timestamp": "2025-12-09T08:38:01Z",
+      "tx_hash": "9a29b1901e5d09f95a264ae5e18f610781d6fe3d5d82c127885d585e7d235850",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
     {
       "body": {
         "address": "SZTGSrxqe65yw7WBM/iqq03xy+c=",
