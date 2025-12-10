@@ -292,17 +292,22 @@ export const persistFundManagerSync = async (
     // 这样确保最新的事件数据最后写入，覆盖之前的值
     const reversedEvents = [...syncResult.fetchResult.events].reverse()
 
-    // 处理各个事件
+    // first stage: handle payment and reward added events
     for (const event of reversedEvents) {
         switch (event.eventName) {
             case 'OrderAmountPaid':
                 await handleOrderAmountPaid(scope, event)
                 break
-            case 'OrderAmountWithdraw':
-                await handleOrderAmountWithdraw(scope, event)
-                break
             case 'RewardAmountAdded':
                 await handleRewardAmountAdded(scope, event)
+                break
+        }
+    }
+    // second stage: handle withdraw events
+    for (const event of reversedEvents) {
+        switch (event.eventName) {
+            case 'OrderAmountWithdraw':
+                await handleOrderAmountWithdraw(scope, event)
                 break
             case 'HelperRewrdsWithdraw':
                 await handleHelperRewardsWithdraw(scope, event)

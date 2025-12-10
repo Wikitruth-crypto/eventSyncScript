@@ -265,18 +265,29 @@ export const persistExchangeSync = async (
     // 这样确保最新的事件数据最后写入，覆盖之前的值
     const reversedEvents = [...syncResult.fetchResult.events].reverse()
 
-    // 处理各个事件
+    // first stage: handle listed events
     for (const event of reversedEvents) {
         switch (event.eventName) {
             case 'BoxListed':
                 await handleBoxListed(scope, event)
                 break
+        }
+    }
+
+    // second stage: handle purchased events
+    for (const event of reversedEvents) {
+        switch (event.eventName) {
             case 'BoxPurchased':
                 await handleBoxPurchased(scope, event)
                 break
             case 'BidPlaced':
                 await handleBidPlaced(scope, event)
                 break
+        }
+    }
+    // third stage: handle assigned events
+    for (const event of reversedEvents) {
+        switch (event.eventName) {
             case 'CompleterAssigned':
                 await handleCompleterAssigned(scope, event)
                 break
