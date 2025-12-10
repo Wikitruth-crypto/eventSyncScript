@@ -26,8 +26,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18.18.0'
-          cache: 'npm'
-          cache-dependency-path: eventSyncScript/package-lock.json
+          # cache: 'npm'
+          # cache-dependency-path: eventSyncScript/package-lock.json
 
       - name: Install dependencies
         working-directory: eventSyncScript
