@@ -16,10 +16,10 @@ export interface FetchExchangeEventsResult {
  */
 export async function fetchExchangeEvents(
   scope: RuntimeScope = DEFAULT_SCOPE,
-  last_synced_block?: number,
+  last_synced_block: number,
+  syncToSupabase: boolean = true
 ): Promise<FetchExchangeEventsResult> {
-  console.log(`🌐 正在查询 Exchange 事件：network=${scope.network}, layer=${scope.layer}`)
-  console.log('ℹ️  当前模式：获取事件数据、解码事件、写入数据库')
+  console.log(`🌐 正在查询 Exchange：network=${scope.network}, layer=${scope.layer}`)
 
   const fromRoundOverride = process.env.EVENT_SYNC_FROM_BLOCK
     ? Number(process.env.EVENT_SYNC_FROM_BLOCK)
@@ -42,6 +42,8 @@ export async function fetchExchangeEvents(
     scope,
   )
 
+  // console.log("decodedEvents:",decodedEvents)
+
   console.log(`✅ 已获取 ${decodedEvents.length} 条解码后的事件（总计 ${syncResult.fetchResult.totalFetched} 条原始事件，抓取 ${syncResult.fetchResult.pagesFetched} 页）`)
 
   const syncResultWithDecodedEvents = {
@@ -53,7 +55,9 @@ export async function fetchExchangeEvents(
   }
 
   // ✅ 写入数据库
-  await persistExchangeSync(scope, ContractName.EXCHANGE, syncResultWithDecodedEvents)
+  if(syncToSupabase) {
+    await persistExchangeSync(scope, ContractName.EXCHANGE, syncResultWithDecodedEvents)
+  }
 
   let outputPath: string | null = null
   if (shouldSaveEventDataToFile()) {

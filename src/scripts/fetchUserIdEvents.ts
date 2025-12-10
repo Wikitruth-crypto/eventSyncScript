@@ -16,10 +16,10 @@ export interface FetchUserIdEventsResult {
  */
 export async function fetchUserIdEvents(
     scope: RuntimeScope = DEFAULT_SCOPE,
-    last_synced_block?: number,
+    last_synced_block: number,
+    syncToSupabase: boolean = true
 ): Promise<FetchUserIdEventsResult> {
     console.log(`🌐 正在查询 UserId 事件：network=${scope.network}, layer=${scope.layer}`)
-    console.log('ℹ️  当前模式：获取事件数据、解码事件、写入数据库')
 
     const fromRoundOverride = process.env.EVENT_SYNC_FROM_BLOCK
         ? Number(process.env.EVENT_SYNC_FROM_BLOCK)
@@ -53,7 +53,9 @@ export async function fetchUserIdEvents(
     }
 
     // ✅ 写入数据库
-    await persistUserAddressSync(scope, ContractName.USER_ID, syncResultWithDecodedEvents)
+    if(syncToSupabase){
+        await persistUserAddressSync(scope, ContractName.USER_ID, syncResultWithDecodedEvents)
+    }
 
     let outputPath: string | null = null
     if (shouldSaveEventDataToFile()) {

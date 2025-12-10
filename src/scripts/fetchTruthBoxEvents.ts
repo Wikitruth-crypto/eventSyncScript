@@ -19,10 +19,10 @@ export interface FetchTruthBoxEventsResult {
  */
 export async function fetchTruthBoxEvents(
   scope: RuntimeScope = DEFAULT_SCOPE,
-  last_synced_block?: number,
+  last_synced_block: number,
+  syncToSupabase: boolean = true
 ): Promise<FetchTruthBoxEventsResult> {
-  console.log(`🌐 正在查询 TruthBox 事件：network=${scope.network}, layer=${scope.layer}`)
-  console.log('ℹ️  当前模式：获取事件数据、解码事件、写入数据库、获取 IPFS metadata')
+  console.log(`🌐 正在查询 TruthBox：network=${scope.network}, layer=${scope.layer}`)
 
   // 确定起始区块高度
   // 优先级：环境变量 > 传入参数 > syncState.json（由 syncRuntimeContractEvents 内部处理）
@@ -47,6 +47,8 @@ export async function fetchTruthBoxEvents(
     scope,
   )
 
+  // console.log("decodedEvents:",decodedEvents)
+
   console.log(`✅ 已获取 ${decodedEvents.length} 条解码后的事件（总计 ${syncResult.fetchResult.totalFetched} 条原始事件，抓取 ${syncResult.fetchResult.pagesFetched} 页）`)
 
   // 创建包含解码后事件的结果对象
@@ -59,8 +61,9 @@ export async function fetchTruthBoxEvents(
   }
 
   // ✅ 写入数据库并获取 IPFS metadata
-  await persistTruthBoxSync(scope, ContractName.TRUTH_BOX, syncResultWithDecodedEvents)
-
+  if(syncToSupabase) {
+    await persistTruthBoxSync(scope, ContractName.TRUTH_BOX, syncResultWithDecodedEvents)
+  }
   // 可选：保存原始事件数据到文件（用于调试）
   // 通过环境变量 EVENT_SYNC_SAVE_JSON=true 启用
   let outputPath: string | null = null

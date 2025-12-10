@@ -1,18 +1,7 @@
-/**
- * 环境变量加载配置
- * 支持加载 .env 和 .env.local 文件
- * .env.local 中的配置会覆盖 .env 中的同名配置
- * 
- * 优先级：.env.local > .env > 系统环境变量
- */
 
 import { config } from 'dotenv'
 import path from 'node:path'
 
-/**
- * 加载环境变量
- * 优先级：.env.local > .env > 系统环境变量
- */
 export const loadEnv = () => {
   const envDir = process.cwd()
 
