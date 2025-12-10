@@ -10,7 +10,7 @@ on:
     branches:
       - main
     paths:
-      - 'eventSyncScript/**'
+      - '**'
       - '.github/workflows/event-sync.yml'
 
 jobs:
@@ -26,15 +26,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18.18.0'
-          # cache: 'npm'
-          # cache-dependency-path: eventSyncScript/package-lock.json
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        working-directory: eventSyncScript
         run: npm ci
 
       - name: Run event sync script
-        working-directory: eventSyncScript
         env:
           # Supabase 配置（从 GitHub Secrets 读取）
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -56,6 +54,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: sync-logs
-          path: eventSyncScript/*.log
+          path: '*.log'
           if-no-files-found: ignore
 
