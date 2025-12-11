@@ -9,9 +9,9 @@ import { DEFAULT_SCOPE } from './config/sync'
 
 async function main() {
   try {
-    const writeToSupabase = false
+    const writeToSupabase = true
     const reSet = false
-    const isUpdateSyncBlock = false
+    const isUpdateSyncBlock = true
     let last_synced_block = 14458354 // 重新开始同步
 
     // Step 1：从 Supabase 中获取所需要的数据
