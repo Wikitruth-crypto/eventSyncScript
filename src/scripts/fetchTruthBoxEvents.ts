@@ -47,7 +47,7 @@ export async function fetchTruthBoxEvents(
     scope,
   )
 
-  // console.log("decodedEvents:",decodedEvents)
+  console.log("decodedEvents:",decodedEvents)
 
   console.log(`✅ 已获取 ${decodedEvents.length} 条解码后的事件（总计 ${syncResult.fetchResult.totalFetched} 条原始事件，抓取 ${syncResult.fetchResult.pagesFetched} 页）`)
 

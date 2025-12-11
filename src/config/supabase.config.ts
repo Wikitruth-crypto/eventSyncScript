@@ -95,7 +95,7 @@ export interface Database {
                     accepted_token: string | null;
                     refund_permit: boolean | null;
                     create_timestamp: string;
-                    sell_timestamp: string | null;
+                    // sell_timestamp: string | null;
                     publish_timestamp: string | null;
                     listed_timestamp: string | null;
                     purchase_timestamp: string | null;
@@ -124,7 +124,7 @@ export interface Database {
                     accepted_token?: string | null;
                     refund_permit?: boolean | null;
                     create_timestamp: string;
-                    sell_timestamp?: string | null;
+                    // sell_timestamp?: string | null;
                     publish_timestamp?: string | null;
                     listed_timestamp?: string | null;
                     purchase_timestamp?: string | null;

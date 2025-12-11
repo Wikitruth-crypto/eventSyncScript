@@ -9,9 +9,9 @@ import { DEFAULT_SCOPE } from './config/sync'
 
 async function main() {
   try {
-    const writeToSupabase = true
+    const writeToSupabase = false
     const reSet = false
-    const isUpdateSyncBlock = true
+    const isUpdateSyncBlock = false
     let last_synced_block = 14458354 // 重新开始同步
 
     // Step 1：从 Supabase 中获取所需要的数据
@@ -36,13 +36,15 @@ async function main() {
 
     const result_userId = await fetchUserIdEvents(DEFAULT_SCOPE, last_synced_block, writeToSupabase)
 
-    const latest_block = Math.min(
-      result_truthBox.block_number,
-      result_truthNFT.block_number,
-      result_exchange.block_number,
-      result_fundManager.block_number,
-      result_userId.block_number,
-    )
+    // const latest_block = Math.min(
+    //   result_truthBox.block_number,
+    //   result_truthNFT.block_number,
+    //   result_exchange.block_number,
+    //   result_fundManager.block_number,
+    //   result_userId.block_number,
+    // )
+    const latest_block = result_truthBox.block_number
+
     if (isUpdateSyncBlock) {
       await updateSyncStatus(DEFAULT_SCOPE, latest_block)
     }

@@ -5,3 +5,4 @@ export * from './eventSignatures';
 
 export * from './types';
 
+export * from './ProtocolConstants';

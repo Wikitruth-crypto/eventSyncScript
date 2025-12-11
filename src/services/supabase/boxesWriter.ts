@@ -7,6 +7,7 @@ import { getEventArg } from './eventArgs'
 import { sanitizeForSupabase, getEventArgAsString, hasEventArg } from './utils'
 import type { DecodedRuntimeEvent } from '../../oasisQuery/app/services/events'
 import { extractTimestamp } from '../../utils/extractTimestamp'
+// import { getProtocolConstants } from '../../contractsConfig/ProtocolConstants'
 
 /**
  * 处理 BoxCreated 事件，创建 boxes 记录
@@ -17,6 +18,8 @@ const handleBoxCreated = async (
     scope: RuntimeScope,
     event: DecodedRuntimeEvent<Record<string, unknown>>,
 ) => {
+
+
     // 使用通用工具安全地提取事件参数（正确处理 0 值）
     const boxId = getEventArgAsString(event, 'boxId')
     const userId = getEventArgAsString(event, 'userId')
@@ -78,6 +81,8 @@ const handleBoxUpdate = async (
     scope: RuntimeScope,
     event: DecodedRuntimeEvent<Record<string, unknown>>,
 ) => {
+    // const protocolConstants = getProtocolConstants(scope)
+
     // 使用通用工具安全地提取事件参数（正确处理 0 值）
     const boxId = getEventArgAsString(event, 'boxId')
     // 只有当 boxId 不存在（undefined）时才跳过（'0' 是有效值）
@@ -102,6 +107,13 @@ const handleBoxUpdate = async (
                     7: 'Blacklisted',
                 }
                 updates.status = statusMap[status] || 'Storing'
+
+                if (status === 1 || status === 2) {
+                    updates.listed_mode = statusMap[status]
+                }
+                if (status === 6) {
+                    updates.publish_timestamp = extractTimestamp(event)
+                }
             }
             break
 
@@ -123,8 +135,12 @@ const handleBoxUpdate = async (
 
         case 'PrivateKeyPublished':
             const privateKey = getEventArgAsString(event, 'privateKey')
+            const userId = getEventArgAsString(event, 'userId')
             if (privateKey !== undefined) {
                 updates.private_key = privateKey
+                updates.publisher_id = userId
+            } else {
+                console.warn(`⚠️  PrivateKeyPublished event for box ${boxId} has undefined privateKey`)
             }
             break
 
