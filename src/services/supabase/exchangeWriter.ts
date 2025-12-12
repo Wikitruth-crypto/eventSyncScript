@@ -103,6 +103,7 @@ const handleBidPlaced = async (
         layer: scope.layer,
         id: boxId,
         bidder_id: userId,
+        buyer_id: userId,
     }) as Record<string, unknown>
 
     const { error } = await supabase.from('box_bidders').insert(bidderData)

@@ -7,6 +7,10 @@ import { fetchUserIdEvents } from './scripts/fetchUserIdEvents'
 import { getCurrentSupabaseData, updateSyncStatus } from './core/state'
 import { DEFAULT_SCOPE } from './config/sync'
 
+export const CONSTANTS = {
+  writeMetadataBox: true
+}
+
 async function main() {
   try {
     const writeToSupabase = true

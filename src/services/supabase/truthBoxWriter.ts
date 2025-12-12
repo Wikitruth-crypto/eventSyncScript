@@ -6,6 +6,7 @@ import { isSupabaseConfigured } from '../../config/supabase'
 import { ensureBoxesExist } from './boxesWriter'
 import { ensureUsersExist } from './usersWriter'  // 新增
 import { upsertMetadataFromEvents } from './metadataWriter'
+import {CONSTANTS} from '../../index'
 
 export const persistTruthBoxSync = async (
   scope: RuntimeScope,
@@ -38,7 +39,7 @@ export const persistTruthBoxSync = async (
       return false
     }
   )
-  if (metadataEvents.length) {
+  if (metadataEvents.length && CONSTANTS.writeMetadataBox) {
     await upsertMetadataFromEvents(scope, metadataEvents)
   }
 }
