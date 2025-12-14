@@ -17,8 +17,7 @@ export interface SyncStatusData {
 
 /**
  * 从 Supabase sync_status 表读取同步状态
- * 注意：Supabase 的 sync_status 表是按 network/layer 存储的，不区分合约
- * 所以这里返回的是整个网络的最后同步区块高度
+ * 注意：Supabase 的 sync_status 表是按 network/layer/contract_name 存储的，每个合约有独立的同步状态
  */
 export const getSyncCursor = async (key: ContractSyncKey): Promise<SyncCursor> => {
   try {
@@ -29,7 +28,7 @@ export const getSyncCursor = async (key: ContractSyncKey): Promise<SyncCursor> =
       .select('last_synced_block, last_synced_at')
       .eq('network', key.network)
       .eq('layer', key.layer)
-      .eq('id', 1)
+      .eq('contract_name', key.contract)
       .single()
 
     if (error) {
@@ -68,8 +67,7 @@ export const getSyncCursor = async (key: ContractSyncKey): Promise<SyncCursor> =
 
 /**
  * 更新 Supabase sync_status 表的同步状态
- * 注意：这里更新的是整个网络的 last_synced_block，不区分合约
- * 保留 ContractSyncKey 参数以兼容 runtimeContractSyncer.ts，但实际只使用 network 和 layer
+ * 注意：这里更新的是特定合约的 last_synced_block
  */
 export const updateSyncCursor = async (key: ContractSyncKey, cursor: SyncCursor): Promise<void> => {
   try {
@@ -81,12 +79,12 @@ export const updateSyncCursor = async (key: ContractSyncKey, cursor: SyncCursor)
         {
           network: key.network,
           layer: key.layer,
-          id: 1,
+          contract_name: key.contract,
           last_synced_block: cursor.lastBlock.toString(),
           last_synced_at: cursor.lastTimestamp || new Date().toISOString(),
         },
         {
-          onConflict: 'network,layer,id',
+          onConflict: 'network,layer,contract_name',
         },
       )
 
@@ -104,11 +102,12 @@ export const updateSyncCursor = async (key: ContractSyncKey, cursor: SyncCursor)
 }
 
 /**
- * 更新 Supabase sync_status 表的同步状态（接受 RuntimeScope）
- * 用于主入口文件，不区分合约
+ * 更新 Supabase sync_status 表的同步状态（接受 RuntimeScope 和合约名称）
+ * 用于主入口文件，更新特定合约的同步状态
  */
 export const updateSyncStatus = async (
   scope: RuntimeScope,
+  contract: ContractName,
   lastBlock: number,
 ): Promise<void> => {
   try {
@@ -120,12 +119,12 @@ export const updateSyncStatus = async (
         {
           network: scope.network,
           layer: scope.layer,
-          id: 1,
+          contract_name: contract,
           last_synced_block: lastBlock.toString(),
           last_synced_at: new Date().toISOString(),
         },
         {
-          onConflict: 'network,layer,id',
+          onConflict: 'network,layer,contract_name',
         },
       )
 
@@ -145,10 +144,12 @@ export const updateSyncStatus = async (
 /**
  * 从 Supabase 读取同步状态数据（兼容旧接口）
  * @param scope - 运行时范围（network 和 layer）
+ * @param contract - 合约名称
  * @returns 同步状态数据，如果不存在则返回 null
  */
 export const getCurrentSupabaseData = async (
   scope: RuntimeScope,
+  contract: ContractName,
 ): Promise<SyncStatusData | null> => {
   try {
     const supabase = getSupabaseClient()
@@ -158,7 +159,7 @@ export const getCurrentSupabaseData = async (
       .select('last_synced_block, last_synced_at')
       .eq('network', scope.network)
       .eq('layer', scope.layer)
-      .eq('id', 1)
+      .eq('contract_name', contract)
       .single()
 
     if (error) {
@@ -195,7 +196,7 @@ export const getStartBlockHeight = async (
   scope: RuntimeScope,
   contract: ContractName,
 ): Promise<number> => {
-  const syncStatus = await getCurrentSupabaseData(scope)
+  const syncStatus = await getCurrentSupabaseData(scope, contract)
 
   if (syncStatus && syncStatus.last_synced_block > 0) {
     // 使用 Supabase 中的 last_synced_block + 1

@@ -477,14 +477,14 @@ export interface Database {
                 Row: {
                     network: 'testnet' | 'mainnet';
                     layer: 'sapphire';
-                    id: string;
+                    contract_name: string;
                     last_synced_block: string;
                     last_synced_at: string;
                 };
                 Insert: {
                     network: 'testnet' | 'mainnet';
                     layer?: 'sapphire';
-                    id?: string;
+                    contract_name: string;
                     last_synced_block?: string;
                     last_synced_at?: string;
                 };
@@ -492,7 +492,7 @@ export interface Database {
                 Update: {
                     network?: 'testnet' | 'mainnet';
                     layer?: 'sapphire';
-                    id?: string;
+                    contract_name?: string;
                     last_synced_block?: string;
                     last_synced_at?: string;
                 };
