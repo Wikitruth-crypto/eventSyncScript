@@ -42,7 +42,9 @@ export const SYNC_STATE_CONFIG = {
  * 输出配置
  */
 export const OUTPUT_CONFIG = {
-    /** 输出目录 */
-    OUTPUT_DIR: process.env.EVENT_SYNC_OUTPUT_DIR ?? 'data',
+    // 原始事件输出目录
+    OUTPUT_DIR_RAW_EVENTS: process.env.EVENT_SYNC_OUTPUT_DIR_RAW_EVENTS ?? 'data/rawEvents',
+    // 解码后事件输出目录
+    OUTPUT_DIR_DECODED_EVENTS: process.env.EVENT_SYNC_OUTPUT_DIR_DECODED_EVENTS ?? 'data/decodedEvents',
 } as const
 

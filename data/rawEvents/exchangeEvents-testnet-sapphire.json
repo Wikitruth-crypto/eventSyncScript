@@ -1,0 +1,357 @@
+{
+  "fetchedAt": "2025-12-14T07:54:22.733Z",
+  "scope": {
+    "network": "testnet",
+    "layer": "sapphire"
+  },
+  "contract": "EXCHANGE",
+  "cursorBefore": {
+    "lastBlock": 14807019,
+    "lastTimestamp": "2025-12-14T04:05:43.157+00:00"
+  },
+  "cursorAfter": {
+    "lastBlock": 14807019,
+    "lastLogIndex": 0,
+    "lastTimestamp": "2025-12-14T03:12:15Z",
+    "lastEventId": "69655a1186ec8d405ce26fe39a051dcf22d1c448755c9c5d1f527c0de9947803"
+  },
+  "pagesFetched": 1,
+  "totalFetched": 20,
+  "eventCount": 20,
+  "rawEvents": [
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGlLWgk=",
+        "topics": [
+          "rvdyNSA4Du5t46YM3qhJGq3cogwM2y0YUMp/kxlHgxU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+        ]
+      },
+      "eth_tx_hash": "cfa80821d27f8cdfd375d922c4fdfba223f0a2ff2bb92224f8fececd4aa8a1e4",
+      "round": 14807019,
+      "timestamp": "2025-12-14T03:12:15Z",
+      "tx_hash": "69655a1186ec8d405ce26fe39a051dcf22d1c448755c9c5d1f527c0de9947803",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "",
+        "topics": [
+          "D8aUBwOei6jN1RfipMrp3RlpewpQD/N6JCXFnrxkmzE=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM="
+        ]
+      },
+      "eth_tx_hash": "cfa80821d27f8cdfd375d922c4fdfba223f0a2ff2bb92224f8fececd4aa8a1e4",
+      "round": 14807019,
+      "timestamp": "2025-12-14T03:12:15Z",
+      "tx_hash": "69655a1186ec8d405ce26fe39a051dcf22d1c448755c9c5d1f527c0de9947803",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGlLV6U=",
+        "topics": [
+          "rvdyNSA4Du5t46YM3qhJGq3cogwM2y0YUMp/kxlHgxU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM="
+        ]
+      },
+      "eth_tx_hash": "72db2e65955d959d841e7091d72a1265839ee1e56a46974ae0c3facd35f12fc2",
+      "round": 14806916,
+      "timestamp": "2025-12-14T03:02:03Z",
+      "tx_hash": "7b12520c602c11cf91ccf396756543bbf645e1fdd665c131005d7c833408e231",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "",
+        "topics": [
+          "D8aUBwOei6jN1RfipMrp3RlpewpQD/N6JCXFnrxkmzE=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM="
+        ]
+      },
+      "eth_tx_hash": "72db2e65955d959d841e7091d72a1265839ee1e56a46974ae0c3facd35f12fc2",
+      "round": 14806916,
+      "timestamp": "2025-12-14T03:02:03Z",
+      "tx_hash": "7b12520c602c11cf91ccf396756543bbf645e1fdd665c131005d7c833408e231",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGlJcXc=",
+        "topics": [
+          "rvdyNSA4Du5t46YM3qhJGq3cogwM2y0YUMp/kxlHgxU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+        ]
+      },
+      "eth_tx_hash": "fda42846ef73494021664d17a0c19afd7881ad54f510fc9f54c099d93d71e952",
+      "round": 14786293,
+      "timestamp": "2025-12-12T16:27:41Z",
+      "tx_hash": "09383963b7b9ab75117bc5fdb0ba6960fba7793a59fb37555c244b76ff030be9",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "",
+        "topics": [
+          "D8aUBwOei6jN1RfipMrp3RlpewpQD/N6JCXFnrxkmzE=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI="
+        ]
+      },
+      "eth_tx_hash": "fda42846ef73494021664d17a0c19afd7881ad54f510fc9f54c099d93d71e952",
+      "round": 14786293,
+      "timestamp": "2025-12-12T16:27:41Z",
+      "tx_hash": "09383963b7b9ab75117bc5fdb0ba6960fba7793a59fb37555c244b76ff030be9",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGlFZP4=",
+        "topics": [
+          "rvdyNSA4Du5t46YM3qhJGq3cogwM2y0YUMp/kxlHgxU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE="
+        ]
+      },
+      "eth_tx_hash": "ac3cf826a39b4704333142cccd1d2a838c39631fef80349cff724b7f1614aef1",
+      "round": 14785239,
+      "timestamp": "2025-12-12T14:45:24Z",
+      "tx_hash": "1a4497602825ce93bfe2ad226d3552845818e1a514ce9bccc662340f28303057",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "",
+        "topics": [
+          "tlYZj9iadpn/PZQtyXRnb0cHgdnUN9tF5fHGsH78loo=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI="
+        ]
+      },
+      "eth_tx_hash": "ac3cf826a39b4704333142cccd1d2a838c39631fef80349cff724b7f1614aef1",
+      "round": 14785239,
+      "timestamp": "2025-12-12T14:45:24Z",
+      "tx_hash": "1a4497602825ce93bfe2ad226d3552845818e1a514ce9bccc662340f28303057",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "AAAAAAAAAAAAAAAARJ4s1h8DKK5o9KUwFwyJK0W0smk=",
+        "topics": [
+          "Zb6dJE7eoRZni5uJc0fSvtqRG+Dt4EhpTLNlLpB96BY=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ="
+        ]
+      },
+      "eth_tx_hash": "a6328112d54149b03e7de1ad1df302725dd318109efe62ff8fa2fd431ae7c4ec",
+      "round": 14785168,
+      "timestamp": "2025-12-12T14:38:28Z",
+      "tx_hash": "788b5834eb565802d521591811996219cb523d67dfeda5ff49d5fe3a9eb37a28",
+      "tx_index": 1,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "AAAAAAAAAAAAAAAATjAzeQjhmRfz90rbRZZhFKVSBcI=",
+        "topics": [
+          "Zb6dJE7eoRZni5uJc0fSvtqRG+Dt4EhpTLNlLpB96BY=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE="
+        ]
+      },
+      "eth_tx_hash": "8c045514ad854652a2ee1eda96b49b8507eeb8ded69773665de6bfd915aea749",
+      "round": 14771790,
+      "timestamp": "2025-12-11T15:47:29Z",
+      "tx_hash": "f5e34a8b05dc822fe330169693ce4d5664b322fb5f498227bb290d4ce5b06aa3",
+      "tx_index": 2,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGlEDVI=",
+        "topics": [
+          "rvdyNSA4Du5t46YM3qhJGq3cogwM2y0YUMp/kxlHgxU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ="
+        ]
+      },
+      "eth_tx_hash": "ea592d7f89864bed8bf26190e559bec5ef634ac2fa1279bd94cad298ca04b2b6",
+      "round": 14770892,
+      "timestamp": "2025-12-11T14:19:03Z",
+      "tx_hash": "f2381b7079cee11324c57c18a2c6103163fa65c6ee59200ffa6be7a434257e98",
+      "tx_index": 1,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "",
+        "topics": [
+          "tlYZj9iadpn/PZQtyXRnb0cHgdnUN9tF5fHGsH78loo=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ="
+        ]
+      },
+      "eth_tx_hash": "ea592d7f89864bed8bf26190e559bec5ef634ac2fa1279bd94cad298ca04b2b6",
+      "round": 14770892,
+      "timestamp": "2025-12-11T14:19:03Z",
+      "tx_hash": "f2381b7079cee11324c57c18a2c6103163fa65c6ee59200ffa6be7a434257e98",
+      "tx_index": 1,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGlH+nE=",
+        "topics": [
+          "rvdyNSA4Du5t46YM3qhJGq3cogwM2y0YUMp/kxlHgxU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM="
+        ]
+      },
+      "eth_tx_hash": "be1d71a1725c4e5846f9c12a25026b7670bba4d4b40ed584c6004f45fb73215f",
+      "round": 14770576,
+      "timestamp": "2025-12-11T13:47:35Z",
+      "tx_hash": "967e5c6cd6b61874864c1d006f914fb00ffa2cd6fbf0aaca8d0e19074178ab37",
+      "tx_index": 2,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "",
+        "topics": [
+          "D8aUBwOei6jN1RfipMrp3RlpewpQD/N6JCXFnrxkmzE=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM="
+        ]
+      },
+      "eth_tx_hash": "be1d71a1725c4e5846f9c12a25026b7670bba4d4b40ed584c6004f45fb73215f",
+      "round": 14770576,
+      "timestamp": "2025-12-11T13:47:35Z",
+      "tx_hash": "967e5c6cd6b61874864c1d006f914fb00ffa2cd6fbf0aaca8d0e19074178ab37",
+      "tx_index": 2,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "AAAAAAAAAAAAAAAARJ4s1h8DKK5o9KUwFwyJK0W0smk=",
+        "topics": [
+          "Zb6dJE7eoRZni5uJc0fSvtqRG+Dt4EhpTLNlLpB96BY=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE="
+        ]
+      },
+      "eth_tx_hash": "9160d0cbb43e8acf9610ac0598669a5eac6ee668123a01c86970191b134d2446",
+      "round": 14757871,
+      "timestamp": "2025-12-10T16:37:16Z",
+      "tx_hash": "b174fc7c68a54b0690c3ca2d93623f222d08742984ffcfdc03af4a31dfab3efa",
+      "tx_index": 1,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "AAAAAAAAAAAAAAAARJ4s1h8DKK5o9KUwFwyJK0W0smk=",
+        "topics": [
+          "Zb6dJE7eoRZni5uJc0fSvtqRG+Dt4EhpTLNlLpB96BY=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE="
+        ]
+      },
+      "eth_tx_hash": "065810f3a0c5a39b2151afd951c2f7870d3c018ca5b51da03b30fa5391fe10b0",
+      "round": 14757852,
+      "timestamp": "2025-12-10T16:35:22Z",
+      "tx_hash": "77d7676d3e960c6b8cb5d5964f6ba79046e89acc6cf9a98e8824fc7e9132a52e",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "AAAAAAAAAAAAAAAATjAzeQjhmRfz90rbRZZhFKVSBcI=",
+        "topics": [
+          "Zb6dJE7eoRZni5uJc0fSvtqRG+Dt4EhpTLNlLpB96BY=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE="
+        ]
+      },
+      "eth_tx_hash": "f4de2dd3e6d39cf3e0359ab8aeca7df788dbb075d270e1c7dd45ff34ad72edb9",
+      "round": 14750501,
+      "timestamp": "2025-12-10T04:22:40Z",
+      "tx_hash": "d0015db132bd0bf8ef7428d8621395963f10ab2a76480078d4a7d27004ab330f",
+      "tx_index": 2,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "AAAAAAAAAAAAAAAAmQ3kAc0BA6AQfSf4IoPbYPSEQgM=",
+        "topics": [
+          "Zb6dJE7eoRZni5uJc0fSvtqRG+Dt4EhpTLNlLpB96BY=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE="
+        ]
+      },
+      "eth_tx_hash": "3bc514301c64975401f534a2ebe43105e376138ccf094914571d0747e50e0f50",
+      "round": 14737836,
+      "timestamp": "2025-12-09T07:33:03Z",
+      "tx_hash": "58b1972cd8108f36cc1f2c044fe4ce5d699dd22a0debec28ee1a30225c44d22c",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "AAAAAAAAAAAAAAAA32mIBrA8VOnK/oHKyuVM4XJ90TQ=",
+        "topics": [
+          "Zb6dJE7eoRZni5uJc0fSvtqRG+Dt4EhpTLNlLpB96BY=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE="
+        ]
+      },
+      "eth_tx_hash": "7ccf6dc1ccbeeaf066f6251cc5814bf308455649f2545c8a061f8c008db6bcb1",
+      "round": 14582221,
+      "timestamp": "2025-11-28T10:27:05Z",
+      "tx_hash": "274431da6aba7de32107b498457ac8620fd95d60e4d24e51221bfcfe0f5f93e1",
+      "tx_index": 0,
+      "type": "evm.log"
+    },
+    {
+      "body": {
+        "address": "/UxM+osd868/egemMLL7umtFtA0=",
+        "data": "AAAAAAAAAAAAAAAA32mIBrA8VOnK/oHKyuVM4XJ90TQ=",
+        "topics": [
+          "Zb6dJE7eoRZni5uJc0fSvtqRG+Dt4EhpTLNlLpB96BY=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAc=",
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE="
+        ]
+      },
+      "eth_tx_hash": "8790b7f05859b320c85a54104bba20558e638ef19c42a4afc415adcff685b0f4",
+      "round": 14581722,
+      "timestamp": "2025-11-28T09:37:03Z",
+      "tx_hash": "ed8cd3baae152db43cb7aae78a635a70d783841b501293388f3de043e0beba0a",
+      "tx_index": 1,
+      "type": "evm.log"
+    }
+  ]
+}

@@ -42,24 +42,6 @@ export function createSupabaseServiceClient(): SupabaseClient<Database> {
 
 export const supabase = createSupabaseClient();
 
-// ### 📝 写入示例（rewards_addeds）
-
-// ```typescript
-// await supabase.from('rewards_addeds').insert({
-//     network: 'testnet',
-//     layer: 'sapphire',
-//     id: `${transactionHash}-${logIndex}`, // Transaction hash - log index
-//     box_id: boxId,
-//     token: token,
-//     amount: '1000000000000000000',
-//     reward_type: 'Minter', // Minter/Seller/Completer/Total
-//     timestamp: timestamp,
-//     transaction_hash: Buffer.from(transactionHash.slice(2), 'hex'), // BYTEA 类型（去掉 0x 前缀）
-//     block_number: blockNumber
-// });
-// ```
-
-
 /**
  * Supabase 数据库类型定义
  * 

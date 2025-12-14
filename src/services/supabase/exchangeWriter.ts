@@ -85,6 +85,9 @@ const handleBoxPurchased = async (
 /**
  * 处理 BidPlaced 事件
  * 插入 box_bidders 表
+ * 注意：box_bidders 表的主键是 (network, layer, id, bidder_id)
+ * 同一个 box 的同一个 bidder 多次出价只会保留一条记录
+ * 注意：假设 box 已经存在（由 TruthBox 合约事件创建），如果不存在会由数据库外键约束处理
  */
 const handleBidPlaced = async (
     scope: RuntimeScope,
@@ -92,24 +95,58 @@ const handleBidPlaced = async (
 ): Promise<void> => {
     const boxId = getEventArgAsString(event, 'boxId')
     const userId = getEventArgAsString(event, 'userId')
+    const timestamp = extractTimestamp(event)
 
-    if (!boxId || !userId) return
+    // 只有当 boxId 或 userId 不存在（undefined）时才跳过（0 是有效值）
+    if (boxId === undefined || userId === undefined) {
+        console.warn(`⚠️  BidPlaced event missing boxId or userId:`, { boxId, userId })
+        return
+    }
 
     const supabase = getSupabaseClient()
 
-    // 事件按顺序处理，直接插入（如果重复会由数据库约束处理）
+    // 使用 upsert 处理重复的 bid（主键冲突时忽略）
+    // 注意：id 和 bidder_id 需要是字符串形式的数字（PostgreSQL NUMERIC 类型）
+    // 注意：假设 box 已经存在（由 TruthBox 合约事件创建），如果不存在会由数据库外键约束处理
     const bidderData = sanitizeForSupabase({
         network: scope.network,
         layer: scope.layer,
         id: boxId,
         bidder_id: userId,
-        buyer_id: userId,
     }) as Record<string, unknown>
 
-    const { error } = await supabase.from('box_bidders').insert(bidderData)
+    // 先插入 bidder 记录
+    const { error: bidderError } = await supabase
+        .from('box_bidders')
+        .upsert(bidderData, {
+            onConflict: 'network,layer,id,bidder_id',
+        })
 
-    if (error) {
-        console.warn(`⚠️  Failed to insert bidder ${userId} for box ${boxId}:`, error.message)
+    if (bidderError) {
+        // 如果是外键约束错误，说明 box 不存在
+        if (bidderError.code === '23503') {
+            console.warn(`⚠️  Box ${boxId} does not exist (foreign key constraint), skipping BidPlaced event for bidder ${userId}`)
+            return
+        } else {
+            console.error(`❌ Failed to upsert bidder ${userId} for box ${boxId}:`, bidderError.message)
+            console.error(`   错误详情:`, JSON.stringify(bidderError, null, 2))
+            console.error(`   插入数据:`, JSON.stringify(bidderData, null, 2))
+            return
+        }
+    }
+
+    // 更新 box 的 purchase_timestamp（当有 bid 时更新）
+    const boxUpdates = sanitizeForSupabase({
+        purchase_timestamp: timestamp,
+    }) as Record<string, unknown>
+
+    const { error: boxUpdateError } = await supabase
+        .from('boxes')
+        .update(boxUpdates)
+        .match({ network: scope.network, layer: scope.layer, id: boxId })
+
+    if (boxUpdateError) {
+        console.warn(`⚠️  Failed to update purchase_timestamp for box ${boxId}:`, boxUpdateError.message)
     }
 }
 

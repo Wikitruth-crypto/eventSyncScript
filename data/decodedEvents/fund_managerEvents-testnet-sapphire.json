@@ -1,0 +1,188 @@
+{
+  "fetchedAt": "2025-12-14T07:54:25.980Z",
+  "scope": {
+    "network": "testnet",
+    "layer": "sapphire"
+  },
+  "contract": "FUND_MANAGER",
+  "cursorBefore": {
+    "lastBlock": 14807019,
+    "lastTimestamp": "2025-12-14T04:05:43.157+00:00"
+  },
+  "cursorAfter": {
+    "lastBlock": 14807019,
+    "lastLogIndex": 0,
+    "lastTimestamp": "2025-12-14T03:12:15Z",
+    "lastEventId": "69655a1186ec8d405ce26fe39a051dcf22d1c448755c9c5d1f527c0de9947803"
+  },
+  "pagesFetched": 1,
+  "totalFetched": 6,
+  "eventCount": 24,
+  "events": [
+    {
+      "eventName": "OrderAmountPaid",
+      "args": {
+        "boxId": "0",
+        "userId": "3",
+        "token": "0x449e2CD61F0328Ae68f4A530170C892B45b4B269",
+        "amount": "110000000000000000000"
+      },
+      "raw": {
+        "body": {
+          "address": "KP4MRelzComr3dTcgXtTL4Av4eM=",
+          "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF9o6BMez4AAA=",
+          "topics": [
+            "qA5tCCNL6bb8ifuey7oJtvrvwQ4nwtafrBX4HIe/qUE=",
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM=",
+            "AAAAAAAAAAAAAAAARJ4s1h8DKK5o9KUwFwyJK0W0smk="
+          ]
+        },
+        "eth_tx_hash": "cfa80821d27f8cdfd375d922c4fdfba223f0a2ff2bb92224f8fececd4aa8a1e4",
+        "round": 14807019,
+        "timestamp": "2025-12-14T03:12:15Z",
+        "tx_hash": "69655a1186ec8d405ce26fe39a051dcf22d1c448755c9c5d1f527c0de9947803",
+        "tx_index": 0,
+        "type": "evm.log"
+      }
+    },
+    {
+      "eventName": "OrderAmountPaid",
+      "args": {
+        "boxId": "3",
+        "userId": "3",
+        "token": "0x4e30337908E19917f3F74adB45966114A55205c2",
+        "amount": "275000000000000000000"
+      },
+      "raw": {
+        "body": {
+          "address": "KP4MRelzComr3dTcgXtTL4Av4eM=",
+          "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAO6GRC/NBsAAA=",
+          "topics": [
+            "qA5tCCNL6bb8ifuey7oJtvrvwQ4nwtafrBX4HIe/qUE=",
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM=",
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM=",
+            "AAAAAAAAAAAAAAAATjAzeQjhmRfz90rbRZZhFKVSBcI="
+          ]
+        },
+        "eth_tx_hash": "72db2e65955d959d841e7091d72a1265839ee1e56a46974ae0c3facd35f12fc2",
+        "round": 14806916,
+        "timestamp": "2025-12-14T03:02:03Z",
+        "tx_hash": "7b12520c602c11cf91ccf396756543bbf645e1fdd665c131005d7c833408e231",
+        "tx_index": 0,
+        "type": "evm.log"
+      }
+    },
+    {
+      "eventName": "OrderAmountPaid",
+      "args": {
+        "boxId": "0",
+        "userId": "2",
+        "token": "0x449e2CD61F0328Ae68f4A530170C892B45b4B269",
+        "amount": "100000000000000000000"
+      },
+      "raw": {
+        "body": {
+          "address": "KP4MRelzComr3dTcgXtTL4Av4eM=",
+          "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFa8deLWMQAAA=",
+          "topics": [
+            "qA5tCCNL6bb8ifuey7oJtvrvwQ4nwtafrBX4HIe/qUE=",
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=",
+            "AAAAAAAAAAAAAAAARJ4s1h8DKK5o9KUwFwyJK0W0smk="
+          ]
+        },
+        "eth_tx_hash": "fda42846ef73494021664d17a0c19afd7881ad54f510fc9f54c099d93d71e952",
+        "round": 14786293,
+        "timestamp": "2025-12-12T16:27:41Z",
+        "tx_hash": "09383963b7b9ab75117bc5fdb0ba6960fba7793a59fb37555c244b76ff030be9",
+        "tx_index": 0,
+        "type": "evm.log"
+      }
+    },
+    {
+      "eventName": "OrderAmountPaid",
+      "args": {
+        "boxId": "1",
+        "userId": "2",
+        "token": "0x4e30337908E19917f3F74adB45966114A55205c2",
+        "amount": "50000000000000000000"
+      },
+      "raw": {
+        "body": {
+          "address": "KP4MRelzComr3dTcgXtTL4Av4eM=",
+          "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACteOvFrGIAAA=",
+          "topics": [
+            "qA5tCCNL6bb8ifuey7oJtvrvwQ4nwtafrBX4HIe/qUE=",
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=",
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=",
+            "AAAAAAAAAAAAAAAATjAzeQjhmRfz90rbRZZhFKVSBcI="
+          ]
+        },
+        "eth_tx_hash": "ac3cf826a39b4704333142cccd1d2a838c39631fef80349cff724b7f1614aef1",
+        "round": 14785239,
+        "timestamp": "2025-12-12T14:45:24Z",
+        "tx_hash": "1a4497602825ce93bfe2ad226d3552845818e1a514ce9bccc662340f28303057",
+        "tx_index": 0,
+        "type": "evm.log"
+      }
+    },
+    {
+      "eventName": "OrderAmountPaid",
+      "args": {
+        "boxId": "4",
+        "userId": "3",
+        "token": "0x449e2CD61F0328Ae68f4A530170C892B45b4B269",
+        "amount": "400000000000000000000"
+      },
+      "raw": {
+        "body": {
+          "address": "KP4MRelzComr3dTcgXtTL4Av4eM=",
+          "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVrx14tYxAAAA=",
+          "topics": [
+            "qA5tCCNL6bb8ifuey7oJtvrvwQ4nwtafrBX4HIe/qUE=",
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ=",
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM=",
+            "AAAAAAAAAAAAAAAARJ4s1h8DKK5o9KUwFwyJK0W0smk="
+          ]
+        },
+        "eth_tx_hash": "ea592d7f89864bed8bf26190e559bec5ef634ac2fa1279bd94cad298ca04b2b6",
+        "round": 14770892,
+        "timestamp": "2025-12-11T14:19:03Z",
+        "tx_hash": "f2381b7079cee11324c57c18a2c6103163fa65c6ee59200ffa6be7a434257e98",
+        "tx_index": 1,
+        "type": "evm.log"
+      }
+    },
+    {
+      "eventName": "OrderAmountPaid",
+      "args": {
+        "boxId": "3",
+        "userId": "2",
+        "token": "0x4e30337908E19917f3F74adB45966114A55205c2",
+        "amount": "250000000000000000000"
+      },
+      "raw": {
+        "body": {
+          "address": "KP4MRelzComr3dTcgXtTL4Av4eM=",
+          "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANjXJrcXeoAAA=",
+          "topics": [
+            "qA5tCCNL6bb8ifuey7oJtvrvwQ4nwtafrBX4HIe/qUE=",
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM=",
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=",
+            "AAAAAAAAAAAAAAAATjAzeQjhmRfz90rbRZZhFKVSBcI="
+          ]
+        },
+        "eth_tx_hash": "be1d71a1725c4e5846f9c12a25026b7670bba4d4b40ed584c6004f45fb73215f",
+        "round": 14770576,
+        "timestamp": "2025-12-11T13:47:35Z",
+        "tx_hash": "967e5c6cd6b61874864c1d006f914fb00ffa2cd6fbf0aaca8d0e19074178ab37",
+        "tx_index": 2,
+        "type": "evm.log"
+      }
+    }
+  ],
+  "decodedAt": "2025-12-14T08:30:17.701Z",
+  "decodedCount": 6,
+  "originalEventCount": 24
+}

@@ -73,7 +73,9 @@ const handleOrderAmountPaid = async (
     const { error } = await supabase.from('payments').insert(paymentData)
 
     if (error) {
-        console.warn(`⚠️  Failed to insert payment for box ${boxId}:`, error.message)
+        console.error(`❌ Failed to insert payment for box ${boxId}:`, error.message)
+        console.error(`   错误详情:`, JSON.stringify(error, null, 2))
+        console.error(`   插入数据:`, JSON.stringify(paymentData, null, 2))
     }
 }
 
@@ -127,7 +129,9 @@ const handleOrderAmountWithdraw = async (
     const { error } = await supabase.from('withdraws').insert(withdrawData)
 
     if (error) {
-        console.warn(`⚠️  Failed to insert withdraw for user ${userId}:`, error.message)
+        console.error(`❌ Failed to insert withdraw for user ${userId} (${withdrawType}):`, error.message)
+        console.error(`   错误详情:`, JSON.stringify(error, null, 2))
+        console.error(`   插入数据:`, JSON.stringify(withdrawData, null, 2))
     }
 }
 
@@ -180,7 +184,9 @@ const handleRewardAmountAdded = async (
     const { error } = await supabase.from('rewards_addeds').insert(rewardData)
 
     if (error) {
-        console.warn(`⚠️  Failed to insert reward for box ${boxId}:`, error.message)
+        console.error(`❌ Failed to insert reward for box ${boxId} (${rewardType}):`, error.message)
+        console.error(`   错误详情:`, JSON.stringify(error, null, 2))
+        console.error(`   插入数据:`, JSON.stringify(rewardData, null, 2))
     }
 }
 
@@ -223,7 +229,9 @@ const handleHelperRewardsWithdraw = async (
     const { error } = await supabase.from('withdraws').insert(withdrawData)
 
     if (error) {
-        console.warn(`⚠️  Failed to insert helper reward withdraw for user ${userId}:`, error.message)
+        console.error(`❌ Failed to insert helper reward withdraw for user ${userId}:`, error.message)
+        console.error(`   错误详情:`, JSON.stringify(error, null, 2))
+        console.error(`   插入数据:`, JSON.stringify(withdrawData, null, 2))
     }
 }
 
@@ -266,7 +274,34 @@ const handleMinterRewardsWithdraw = async (
     const { error } = await supabase.from('withdraws').insert(withdrawData)
 
     if (error) {
-        console.warn(`⚠️  Failed to insert minter reward withdraw for user ${userId}:`, error.message)
+        console.error(`❌ Failed to insert minter reward withdraw for user ${userId}:`, error.message)
+        console.error(`   错误详情:`, JSON.stringify(error, null, 2))
+        console.error(`   插入数据:`, JSON.stringify(withdrawData, null, 2))
+    }
+}
+
+/**
+ * 确保 fund_manager_state 记录存在
+ * 这是 token_total_amounts 表外键约束的要求
+ */
+const ensureFundManagerStateExists = async (scope: RuntimeScope): Promise<void> => {
+    const supabase = getSupabaseClient()
+    
+    const { error } = await supabase
+        .from('fund_manager_state')
+        .upsert(
+            {
+                network: scope.network,
+                layer: scope.layer,
+                id: 'fundManager',
+            },
+            {
+                onConflict: 'network,layer,id',
+            }
+        )
+
+    if (error) {
+        console.warn(`⚠️  Failed to ensure fund_manager_state exists:`, error.message)
     }
 }
 
@@ -285,7 +320,10 @@ export const persistFundManagerSync = async (
 
     if (contract !== ContractName.FUND_MANAGER) return // 只处理 FundManager 合约
 
-    // ✅ 先确保 users 记录存在
+    // ✅ 先确保 fund_manager_state 记录存在（payments 触发器需要）
+    await ensureFundManagerStateExists(scope)
+
+    // ✅ 然后确保 users 记录存在
     await ensureUsersExist(scope, syncResult.fetchResult)
 
     // 反转事件数组：区块链API返回的是最新的在前，我们需要最旧的在前面

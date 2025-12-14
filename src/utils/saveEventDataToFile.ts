@@ -40,7 +40,7 @@ export interface EventDataPayload {
  */
 const resolveOutputPath = (scope: RuntimeScope, contract: ContractName): string => {
     const filename = `${contract.toLowerCase()}Events-${scope.network}-${scope.layer}.json`
-    return path.resolve(process.cwd(), OUTPUT_CONFIG.OUTPUT_DIR, filename)
+    return path.resolve(process.cwd(), OUTPUT_CONFIG.OUTPUT_DIR_RAW_EVENTS, filename)
 }
 
 /**

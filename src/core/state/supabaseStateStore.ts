@@ -185,6 +185,63 @@ export const getCurrentSupabaseData = async (
 }
 
 /**
+ * 一次性获取所有合约的同步状态数据
+ * @param scope - 运行时范围（network 和 layer）
+ * @returns 所有合约的同步状态数据映射，键为合约名称，值为同步状态数据（如果不存在则为 null）
+ */
+export const getAllContractsSyncData = async (
+  scope: RuntimeScope,
+): Promise<Record<ContractName, SyncStatusData | null>> => {
+  try {
+    const supabase = getSupabaseClient()
+
+    const { data, error } = await supabase
+      .from('sync_status')
+      .select('contract_name, last_synced_block, last_synced_at')
+      .eq('network', scope.network)
+      .eq('layer', scope.layer)
+
+    if (error) {
+      console.error('❌ 读取 Supabase 同步状态失败：', error)
+      throw error
+    }
+
+    // 创建一个映射，初始化为所有合约都为 null
+    const result: Record<ContractName, SyncStatusData | null> = {
+      [ContractName.TRUTH_BOX]: null,
+      [ContractName.TRUTH_NFT]: null,
+      [ContractName.EXCHANGE]: null,
+      [ContractName.FUND_MANAGER]: null,
+      [ContractName.USER_ID]: null,
+      [ContractName.ADDRESS_MANAGER]: null,
+      [ContractName.SIWE_AUTH]: null,
+      [ContractName.OFFICIAL_TOKEN]: null,
+      [ContractName.OFFICIAL_TOKEN_SECRET]: null,
+      [ContractName.WROSE_SECRET]: null,
+      [ContractName.ERC20_SECRET]: null,
+    }
+
+    // 填充从数据库读取的数据
+    if (data && Array.isArray(data)) {
+      for (const item of data) {
+        const contractName = item.contract_name as ContractName
+        if (contractName in result) {
+          result[contractName] = {
+            last_synced_block: Number(item.last_synced_block) || 0,
+            last_synced_at: item.last_synced_at,
+          }
+        }
+      }
+    }
+
+    return result
+  } catch (error) {
+    console.error('❌ 读取 Supabase 同步状态失败：', error)
+    throw error
+  }
+}
+
+/**
  * 获取起始区块高度
  * 如果 Supabase 中有记录，使用 last_synced_block + 1
  * 否则使用合约配置中的 startBlock

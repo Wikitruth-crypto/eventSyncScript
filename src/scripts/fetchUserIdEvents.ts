@@ -5,6 +5,7 @@ import { DEFAULT_SCOPE, EVENT_QUERY_CONFIG } from '../config/sync'
 import { persistUserAddressSync } from '../services/supabase/userAddressWriter'
 import { saveEventDataToFile, shouldSaveEventDataToFile } from '../utils/saveEventDataToFile'
 import { decodeContractEvents } from '../utils/decodeEvents'
+import { updateSyncStatus } from '../core/state'
 
 export interface FetchUserIdEventsResult {
     outputPath: string | null
@@ -13,18 +14,23 @@ export interface FetchUserIdEventsResult {
 
 /**
  * 获取 UserId 合约事件
+ * @param scope - 运行时范围
+ * @param lastSyncedBlock - 上次同步的区块高度（可选），如果未提供则使用合约配置的 startBlock
+ * @param syncToSupabase - 是否同步到 Supabase 数据库
+ * @param updateSyncBlock - 是否更新同步状态（默认 true）
  */
 export async function fetchUserIdEvents(
     scope: RuntimeScope = DEFAULT_SCOPE,
-    last_synced_block: number,
-    syncToSupabase: boolean = true
+    lastSyncedBlock?: number,
+    syncToSupabase: boolean = true,
+    updateSyncBlock: boolean = true
 ): Promise<FetchUserIdEventsResult> {
     console.log(`🌐 正在查询 UserId 事件：network=${scope.network}, layer=${scope.layer}`)
 
     const fromRoundOverride = process.env.EVENT_SYNC_FROM_BLOCK
         ? Number(process.env.EVENT_SYNC_FROM_BLOCK)
-        : last_synced_block !== undefined
-            ? last_synced_block + 1
+        : lastSyncedBlock !== undefined
+            ? lastSyncedBlock + 1
             : undefined
 
     const syncResult = await syncRuntimeContractEvents({
@@ -65,6 +71,11 @@ export async function fetchUserIdEvents(
     console.log(`📊 同步状态：从区块 ${syncResult.cursorBefore.lastBlock} 到 ${syncResult.cursorAfter.lastBlock}`)
 
     const block_number = syncResult.cursorAfter.lastBlock
+
+    // 更新同步状态
+    if (updateSyncBlock && syncToSupabase) {
+        await updateSyncStatus(scope, ContractName.USER_ID, block_number)
+    }
 
     return {
         outputPath,

@@ -5,6 +5,7 @@ import { DEFAULT_SCOPE, EVENT_QUERY_CONFIG } from '../config/sync'
 import { persistTruthBoxSync } from '../services/supabase/truthBoxWriter'
 import { saveEventDataToFile, shouldSaveEventDataToFile } from '../utils/saveEventDataToFile'
 import { decodeContractEvents } from '../utils/decodeEvents'
+import { updateSyncStatus } from '../core/state'
 
 export interface FetchTruthBoxEventsResult {
   outputPath: string | null 
@@ -14,22 +15,25 @@ export interface FetchTruthBoxEventsResult {
 /**
  * 获取 TruthBox 合约事件
  * @param scope - 运行时范围
- * @param last_synced_block - 上次同步的区块高度（可选），如果未提供则从 Supabase 读取或使用合约配置的 startBlock
+ * @param lastSyncedBlock - 上次同步的区块高度（可选），如果未提供则使用合约配置的 startBlock
+ * @param syncToSupabase - 是否同步到 Supabase 数据库
+ * @param updateSyncBlock - 是否更新同步状态（默认 true）
  * @returns 包含输出路径和最近事件区块高度的结果
  */
 export async function fetchTruthBoxEvents(
   scope: RuntimeScope = DEFAULT_SCOPE,
-  last_synced_block: number,
-  syncToSupabase: boolean = true
+  lastSyncedBlock?: number,
+  syncToSupabase: boolean = true,
+  updateSyncBlock: boolean = true
 ): Promise<FetchTruthBoxEventsResult> {
   console.log(`🌐 正在查询 TruthBox：network=${scope.network}, layer=${scope.layer}`)
 
   // 确定起始区块高度
-  // 优先级：环境变量 > 传入参数 > syncState.json（由 syncRuntimeContractEvents 内部处理）
+  // 优先级：环境变量 > 传入的 lastSyncedBlock
   const fromRoundOverride = process.env.EVENT_SYNC_FROM_BLOCK
     ? Number(process.env.EVENT_SYNC_FROM_BLOCK)
-    : last_synced_block !== undefined
-      ? last_synced_block + 1 // 从 last_synced_block + 1 开始查询
+    : lastSyncedBlock !== undefined
+      ? lastSyncedBlock + 1 // 从 lastSyncedBlock + 1 开始查询
       : undefined
 
   const syncResult = await syncRuntimeContractEvents({
@@ -47,7 +51,7 @@ export async function fetchTruthBoxEvents(
     scope,
   )
 
-  console.log("decodedEvents:",decodedEvents)
+  // console.log("decodedEvents:",decodedEvents)
 
   console.log(`✅ 已获取 ${decodedEvents.length} 条解码后的事件（总计 ${syncResult.fetchResult.totalFetched} 条原始事件，抓取 ${syncResult.fetchResult.pagesFetched} 页）`)
 
@@ -75,6 +79,11 @@ export async function fetchTruthBoxEvents(
 
   // 返回最近事件的区块高度
   const block_number = syncResult.cursorAfter.lastBlock
+
+  // 更新同步状态
+  if (updateSyncBlock && syncToSupabase) {
+    await updateSyncStatus(scope, ContractName.TRUTH_BOX, block_number)
+  }
 
   return {
     outputPath,
