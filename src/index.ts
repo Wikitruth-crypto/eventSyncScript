@@ -9,7 +9,7 @@ import { getAllContractsSyncData } from './core/state'
 import { ContractName } from './contractsConfig/types'
 
 export const CONSTANTS = {
-  writeMetadataBox: false
+  writeMetadataBox: true
 }
 
 async function main() {
@@ -18,9 +18,9 @@ async function main() {
     // console.log('🌐 Not syncing events...')
     // return;
 
-    const writeToSupabase = false
-    const restart = true
-    const isUpdateSyncBlock = false
+    const writeToSupabase = true
+    const restart = false
+    const isUpdateSyncBlock = true
 
     // Get all contracts sync data from Supabase
     const allSyncData = await getAllContractsSyncData(DEFAULT_SCOPE)
