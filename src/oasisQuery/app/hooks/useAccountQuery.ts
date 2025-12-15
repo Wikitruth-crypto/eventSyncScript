@@ -23,10 +23,7 @@ export type AccountQueryResult<T = any> =
 
 const DEFAULT_MAX_RECORDS = 100
 
-/**
- * 在 CLI/脚本环境下用于查询账户信息的统一入口。
- * 根据 scope 判断调用共识层或运行时账号查询器，避免依赖 React Hook。
- */
+
 export const useAccountQuery = async ({
   scope,
   address,

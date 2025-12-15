@@ -1,9 +1,9 @@
 /**
- * 记录脚本开始时的区块高度（本地调试工具）
- * 不应在生产环境（GitHub Actions）中使用
+ * Record the block height at the start of the script (local debugging tool)
+ * Should not be used in production environment (GitHub Actions)
  * 
- * 这是一个独立的功能，应该在脚本开始时调用一次
- * 这样可以避免在脚本运行期间（可能几分钟）产生的新事件被遗漏
+ * This is a standalone feature, should be called once at the start of the script
+ * This can avoid new events generated during the script runtime (possibly minutes) being missed
  */
 
 import type { RuntimeScope } from '../../oasisQuery/types/searchScope'
@@ -19,18 +19,18 @@ const buildCursorKey = (scope: RuntimeScope, contract: ContractName): ContractSy
 })
 
 /**
- * 获取当前区块高度（通过查询 TruthBox 合约的最新事件）
- * @param scope - 运行时范围
- * @param contract - 合约名称
- * @returns 当前区块高度，如果无法获取则返回 0
+ * Get the current block height (by querying the latest event of the TruthBox contract)
+ * @param scope - Runtime scope
+ * @param contract - Contract name
+ * @returns Current block height, if unable to get, return 0
  */
 const getCurrentBlockHeight = async (
     scope: RuntimeScope,
     contract: ContractName,
 ): Promise<number> => {
     try {
-        // 查询最新的事件（limit=1, offset=0）来获取当前区块高度
-        // 注意：这里查询的是最新的事件，所以 offset=0 表示从最新开始
+        // Query the latest event (limit=1, offset=0) to get the current block height
+        // Note: Here we query the latest event, so offset=0 means start from the latest
         const latestEventResult = await fetchRuntimeContractEvents({
             scope,
             contract,
@@ -41,18 +41,18 @@ const getCurrentBlockHeight = async (
             useEvmSignatureFilter: true,
         })
 
-        // 如果获取到了事件，使用最新事件的 round 作为当前区块高度
+        // If an event is obtained, use the round of the latest event as the current block height
         if (latestEventResult.rawEvents.length > 0) {
             const latestEvent = latestEventResult.rawEvents[0]
             const blockHeight = latestEvent.round ?? 0
             return blockHeight
         }
 
-        // 如果没有事件，返回 0
+        // If no event is obtained, return 0
         return 0
     } catch (error) {
         console.warn(
-            `⚠️  获取当前区块高度失败:`,
+            `⚠️  Failed to get current block height:`,
             error instanceof Error ? error.message : String(error),
         )
         return 0
@@ -60,11 +60,11 @@ const getCurrentBlockHeight = async (
 }
 
 /**
- * 记录脚本开始时的区块高度
- * 应该在脚本开始时调用一次，避免在脚本运行期间产生的新事件被遗漏
+ * Record the block height at the start of the script
+ * Should be called once at the start of the script to avoid new events generated during the script runtime being missed
  * 
- * @param scope - 运行时范围
- * @param contract - 合约名称（用于构建 cursor key）
+ * @param scope - Runtime scope
+ * @param contract - Contract name (used to build cursor key)
  */
 export const recordStartBlockHeight = async (
     scope: RuntimeScope,
@@ -73,11 +73,11 @@ export const recordStartBlockHeight = async (
     const cursorKey = buildCursorKey(scope, contract)
     const currentCursor = await getSyncCursor(cursorKey)
 
-    // 获取当前区块高度（通过查询 TruthBox 合约的最新事件）
+    // Get the current block height (by querying the latest event of the TruthBox contract)
     const startBlockHeight = await getCurrentBlockHeight(scope, contract)
 
     if (startBlockHeight > 0) {
-        // 创建起始 cursor（用于记录脚本开始时的区块高度）
+        // Create start cursor (used to record the block height at the start of the script)
         const startCursor: SyncCursor = {
             lastBlock: startBlockHeight,
             lastLogIndex: 0,
@@ -85,15 +85,15 @@ export const recordStartBlockHeight = async (
             lastEventId: '',
         }
 
-        // 立即保存起始区块高度到 syncState.json
-        // 这样即使脚本中途失败，下次也会从这个区块开始查询
+        // Immediately save the start block height to syncState.json
+        // This way, even if the script fails in the middle, the next time will start from this block
         await updateSyncCursor(cursorKey, startCursor)
         console.log(
-            `📌 已记录起始区块高度: ${startBlockHeight} (脚本开始时的区块高度，上次: ${currentCursor.lastBlock})`,
+            `📌 Start block height recorded: ${startBlockHeight} (the block height at the start of the script, last: ${currentCursor.lastBlock})`,
         )
     } else {
         console.log(
-            `ℹ️  无法确定当前区块高度，将使用上次保存的区块高度: ${currentCursor.lastBlock}`,
+            `ℹ️  Unable to determine the current block height, will use the last saved block height: ${currentCursor.lastBlock}`,
         )
     }
 }

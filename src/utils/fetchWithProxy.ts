@@ -1,28 +1,22 @@
 /**
- * 带代理支持的 fetch 工具
- * 统一处理代理配置，供其他模块调用
+ * Fetch tool with proxy support
  */
 
 import { getProxyUrl, isProxyConfigured, shouldUseProxy } from '../config/proxy'
 import { setGlobalDispatcher, ProxyAgent } from 'undici'
 
-// 初始化全局代理（如果启用）
+// Initialize global proxy (if enabled)
 let proxyInitialized = false
 
-/**
- * 初始化全局代理配置
- * 只需要调用一次，后续所有 fetch 请求都会使用代理
- * 只有在 shouldUseProxy() 返回 true 时才会启用代理
- */
 export const initializeProxy = () => {
   if (proxyInitialized) {
     return
   }
 
-  // 检查是否应该使用代理
+  // Check if proxy should be used
   if (!shouldUseProxy()) {
     if (process.env.NODE_ENV !== 'production') {
-      console.log('ℹ️  代理模式已禁用（EVENT_SYNC_USE_PROXY 未设置为 true）')
+      console.log('ℹ️  Proxy mode is disabled (EVENT_SYNC_USE_PROXY is not set to true)')
     }
     return
   }
@@ -30,29 +24,29 @@ export const initializeProxy = () => {
   if (isProxyConfigured()) {
     const proxyUrl = getProxyUrl()
     if (proxyUrl) {
-      console.log(`🌐 启用代理: ${proxyUrl}`)
+      console.log(`🌐 Enable proxy: ${proxyUrl}`)
       setGlobalDispatcher(new ProxyAgent(proxyUrl))
       proxyInitialized = true
     }
   } else {
-    // 代理模式已启用，但代理 URL 未配置
-    console.warn('⚠️  代理模式已启用，但未配置 HTTP_PROXY 或 HTTPS_PROXY 环境变量')
+    // Proxy mode is enabled, but proxy URL is not configured
+    console.warn('⚠️  Proxy mode is enabled, but HTTP_PROXY or HTTPS_PROXY environment variables are not configured')
   }
 }
 
 /**
- * 带超时的 fetch，自动使用代理配置
- * @param url - 请求 URL
- * @param options - fetch 选项
- * @param timeout - 超时时间（毫秒）
- * @returns Response 对象
+ * Fetch with timeout, automatically use proxy configuration
+ * @param url - Request URL
+ * @param options - fetch options
+ * @param timeout - Timeout (milliseconds)
+ * @returns Response object
  */
 export const fetchWithProxy = async (
   url: string,
   options: RequestInit = {},
   timeout: number = 30000,
 ): Promise<Response> => {
-  // 确保代理已初始化
+  // Ensure proxy is initialized
   initializeProxy()
 
   const controller = new AbortController()

@@ -1,4 +1,4 @@
-import './config/env' // 加载环境变量（支持 .env 和 .env.local）
+import './config/env' // Load environment variables (supports .env and .env.local)
 import { fetchTruthBoxEvents } from './scripts/fetchTruthBoxEvents'
 import { fetchTruthNFTEvents } from './scripts/fetchTruthNFTEvents'
 import { fetchExchangeEvents } from './scripts/fetchExchangeEvents'
@@ -9,20 +9,20 @@ import { getAllContractsSyncData } from './core/state'
 import { ContractName } from './contractsConfig/types'
 
 export const CONSTANTS = {
-  writeMetadataBox: true
+  writeMetadataBox: false
 }
 
 async function main() {
   try {
 
-    // console.log('🌐 当前不进行事件同步...')
+    // console.log('🌐 Not syncing events...')
     // return;
 
-    const writeToSupabase = true
-    const restart = false
-    const isUpdateSyncBlock = true
+    const writeToSupabase = false
+    const restart = true
+    const isUpdateSyncBlock = false
 
-    // 一次性获取所有合约的同步状态
+    // Get all contracts sync data from Supabase
     const allSyncData = await getAllContractsSyncData(DEFAULT_SCOPE)
     const default_start_block = 14458354
 
@@ -77,7 +77,7 @@ async function main() {
     )
 
   } catch (error) {
-    console.error('❌ 查询事件失败：', error)
+    console.error('❌ Failed to fetch events:', error)
     process.exitCode = 1
   }
 }

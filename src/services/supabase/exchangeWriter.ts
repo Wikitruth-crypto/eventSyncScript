@@ -10,8 +10,8 @@ import type { DecodedRuntimeEvent } from '../../oasisQuery/app/services/events'
 import { extractTimestamp } from '../../utils/extractTimestamp'
 
 /**
- * 处理 BoxListed 事件
- * 更新 boxes 表的 listed_mode, accepted_token, listed_timestamp, seller_id
+ * Handle BoxListed event
+ * Update boxes table: listed_mode, accepted_token, listed_timestamp, seller_id
  */
 const handleBoxListed = async (
     scope: RuntimeScope,
@@ -35,11 +35,11 @@ const handleBoxListed = async (
         updates.accepted_token = acceptedToken.toLowerCase()
     }
 
-    // 根据当前状态确定 listed_mode
-    // 如果 status 是 'Selling'，则 listed_mode 为 'Selling'
-    // 如果 status 是 'Auctioning'，则 listed_mode 为 'Auctioning'
-    // 这里假设 BoxListed 事件触发时，status 已经通过 BoxStatusChanged 更新为 'Selling' 或 'Auctioning'
-    // 如果需要，可以在这里查询当前状态
+    // Determine listed_mode based on current status
+    // If status is 'Selling', then listed_mode is 'Selling'
+    // If status is 'Auctioning', then listed_mode is 'Auctioning'
+    // Here we assume that when BoxListed event is triggered, status has already been updated to 'Selling' or 'Auctioning' via BoxStatusChanged
+    // If needed, can query current status here
 
     const { error } = await supabase
         .from('boxes')
@@ -52,8 +52,8 @@ const handleBoxListed = async (
 }
 
 /**
- * 处理 BoxPurchased 事件
- * 更新 boxes 表的 buyer_id, purchase_timestamp
+ * Handle BoxPurchased event
+ * Update boxes table: buyer_id, purchase_timestamp
  */
 const handleBoxPurchased = async (
     scope: RuntimeScope,
@@ -83,11 +83,11 @@ const handleBoxPurchased = async (
 }
 
 /**
- * 处理 BidPlaced 事件
- * 插入 box_bidders 表
- * 注意：box_bidders 表的主键是 (network, layer, id, bidder_id)
- * 同一个 box 的同一个 bidder 多次出价只会保留一条记录
- * 注意：假设 box 已经存在（由 TruthBox 合约事件创建），如果不存在会由数据库外键约束处理
+ * Handle BidPlaced event
+ * Insert into box_bidders table
+ * Note: Primary key of box_bidders table is (network, layer, id, bidder_id)
+ * Multiple bids from the same bidder for the same box will only keep one record
+ * Note: Assumes box already exists (created by TruthBox contract events), if not exists will be handled by database foreign key constraint
  */
 const handleBidPlaced = async (
     scope: RuntimeScope,
@@ -97,7 +97,7 @@ const handleBidPlaced = async (
     const userId = getEventArgAsString(event, 'userId')
     const timestamp = extractTimestamp(event)
 
-    // 只有当 boxId 或 userId 不存在（undefined）时才跳过（0 是有效值）
+    // Only skip if boxId or userId is undefined (0 is a valid value)
     if (boxId === undefined || userId === undefined) {
         console.warn(`⚠️  BidPlaced event missing boxId or userId:`, { boxId, userId })
         return
@@ -105,9 +105,9 @@ const handleBidPlaced = async (
 
     const supabase = getSupabaseClient()
 
-    // 使用 upsert 处理重复的 bid（主键冲突时忽略）
-    // 注意：id 和 bidder_id 需要是字符串形式的数字（PostgreSQL NUMERIC 类型）
-    // 注意：假设 box 已经存在（由 TruthBox 合约事件创建），如果不存在会由数据库外键约束处理
+    // Use upsert to handle duplicate bids (ignore on primary key conflict)
+    // Note: id and bidder_id need to be string-formatted numbers (PostgreSQL NUMERIC type)
+    // Note: Assumes box already exists (created by TruthBox contract events), if not exists will be handled by database foreign key constraint
     const bidderData = sanitizeForSupabase({
         network: scope.network,
         layer: scope.layer,
@@ -115,7 +115,7 @@ const handleBidPlaced = async (
         bidder_id: userId,
     }) as Record<string, unknown>
 
-    // 先插入 bidder 记录
+    // First insert bidder record
     const { error: bidderError } = await supabase
         .from('box_bidders')
         .upsert(bidderData, {
@@ -123,19 +123,19 @@ const handleBidPlaced = async (
         })
 
     if (bidderError) {
-        // 如果是外键约束错误，说明 box 不存在
+        // If foreign key constraint error, box doesn't exist
         if (bidderError.code === '23503') {
             console.warn(`⚠️  Box ${boxId} does not exist (foreign key constraint), skipping BidPlaced event for bidder ${userId}`)
             return
         } else {
             console.error(`❌ Failed to upsert bidder ${userId} for box ${boxId}:`, bidderError.message)
-            console.error(`   错误详情:`, JSON.stringify(bidderError, null, 2))
-            console.error(`   插入数据:`, JSON.stringify(bidderData, null, 2))
+            console.error(`   Error details:`, JSON.stringify(bidderError, null, 2))
+            console.error(`   Insert data:`, JSON.stringify(bidderData, null, 2))
             return
         }
     }
 
-    // 更新 box 的 purchase_timestamp（当有 bid 时更新）
+    // Update box's purchase_timestamp (update when there's a bid)
     const boxUpdates = sanitizeForSupabase({
         purchase_timestamp: timestamp,
     }) as Record<string, unknown>
@@ -151,8 +151,8 @@ const handleBidPlaced = async (
 }
 
 /**
- * 处理 CompleterAssigned 事件
- * 更新 boxes 表的 completer_id, complete_timestamp
+ * Handle CompleterAssigned event
+ * Update boxes table: completer_id, complete_timestamp
  */
 const handleCompleterAssigned = async (
     scope: RuntimeScope,
@@ -182,8 +182,8 @@ const handleCompleterAssigned = async (
 }
 
 /**
- * 处理 RequestDeadlineChanged 事件
- * 更新 boxes 表的 request_refund_deadline
+ * Handle RequestDeadlineChanged event
+ * Update boxes table: request_refund_deadline
  */
 const handleRequestDeadlineChanged = async (
     scope: RuntimeScope,
@@ -211,8 +211,8 @@ const handleRequestDeadlineChanged = async (
 }
 
 /**
- * 处理 ReviewDeadlineChanged 事件
- * 更新 boxes 表的 review_deadline
+ * Handle ReviewDeadlineChanged event
+ * Update boxes table: review_deadline
  */
 const handleReviewDeadlineChanged = async (
     scope: RuntimeScope,
@@ -240,8 +240,8 @@ const handleReviewDeadlineChanged = async (
 }
 
 /**
- * 处理 RefundPermitChanged 事件
- * 更新 boxes 表的 refund_permit
+ * Handle RefundPermitChanged event
+ * Update boxes table: refund_permit
  */
 const handleRefundPermitChanged = async (
     scope: RuntimeScope,
@@ -252,11 +252,11 @@ const handleRefundPermitChanged = async (
 
     const supabase = getSupabaseClient()
 
-    // permission 是布尔值，从事件参数中直接获取
+    // permission is a boolean value, get directly from event args
     const permissionRaw = (event.args as Record<string, unknown>)?.permission
     if (permissionRaw === undefined || permissionRaw === null) return
 
-    // 处理布尔值（可能是 boolean、number、string）
+    // Handle boolean value (could be boolean, number, string)
     let permission: boolean
     if (typeof permissionRaw === 'boolean') {
         permission = permissionRaw
@@ -282,7 +282,7 @@ const handleRefundPermitChanged = async (
 }
 
 /**
- * 处理 Exchange 合约事件并写入 Supabase
+ * Process Exchange contract events and write to Supabase
  */
 export const persistExchangeSync = async (
     scope: RuntimeScope,
@@ -290,17 +290,17 @@ export const persistExchangeSync = async (
     syncResult: RuntimeContractSyncResult,
 ): Promise<void> => {
     if (!isSupabaseConfigured()) {
-        console.warn('⚠️  SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY 未配置，跳过数据库写入')
+        console.warn('⚠️  SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY not configured, skipping database write')
         return
     }
 
-    if (contract !== ContractName.EXCHANGE) return // 只处理 Exchange 合约
+    if (contract !== ContractName.EXCHANGE) return // Only process Exchange contract
 
-    // ✅ 先确保 users 记录存在（处理所有事件中的 userId）
+    // ✅ First ensure users records exist (process userId from all events)
     await ensureUsersExist(scope, syncResult.fetchResult)
 
-    // 反转事件数组：区块链API返回的是最新的在前，我们需要最旧的在前面
-    // 这样确保最新的事件数据最后写入，覆盖之前的值
+    // Reverse event array: blockchain API returns newest first, we need oldest first
+    // This ensures latest event data is written last, overwriting previous values
     const reversedEvents = [...syncResult.fetchResult.events].reverse()
 
     // first stage: handle listed events

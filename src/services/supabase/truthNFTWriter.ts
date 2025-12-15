@@ -8,8 +8,8 @@ import { getEventArgAsString, sanitizeForSupabase } from './utils'
 import type { DecodedRuntimeEvent } from '../../oasisQuery/app/services/events'
 
 /**
- * 创建或更新用户地址记录
- * 注意：user_addresses 表只有基础字段，没有其他数据，直接使用 upsert
+ * Create or update user address record
+ * Note: user_addresses table only has basic fields, no other data, use upsert directly
  */
 const ensureUserAddressExists = async (
   scope: RuntimeScope,
@@ -19,7 +19,7 @@ const ensureUserAddressExists = async (
 
   const supabase = getSupabaseClient()
 
-  // 直接使用 upsert，即使已存在也不会报错
+  // Use upsert directly, won't error even if already exists
   const addressData = sanitizeForSupabase({
     network: scope.network,
     layer: scope.layer,
@@ -39,7 +39,7 @@ const ensureUserAddressExists = async (
 }
 
 /**
- * 处理 Transfer 事件，更新 boxes 表的 owner_address
+ * Handle Transfer event, update boxes table owner_address
  */
 const handleTransfer = async (
   scope: RuntimeScope,
@@ -52,10 +52,10 @@ const handleTransfer = async (
 
   const supabase = getSupabaseClient()
 
-  // 确保用户地址存在
+  // Ensure user address exists
   await ensureUserAddressExists(scope, to)
 
-  // 更新 boxes 表的 owner_address
+  // Update boxes table owner_address
   const { error } = await supabase
     .from('boxes')
     .update({ owner_address: to.toLowerCase() })
@@ -67,7 +67,7 @@ const handleTransfer = async (
 }
 
 /**
- * 处理 TruthNFT 合约事件并写入 Supabase
+ * Process TruthNFT contract events and write to Supabase
  */
 export const persistTruthNFTSync = async (
   scope: RuntimeScope,
@@ -75,17 +75,17 @@ export const persistTruthNFTSync = async (
   syncResult: RuntimeContractSyncResult,
 ): Promise<void> => {
   if (!isSupabaseConfigured()) {
-    console.warn('⚠️  SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY 未配置，跳过数据库写入')
+    console.warn('⚠️  SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY not configured, skipping database write')
     return
   }
 
-  if (contract !== ContractName.TRUTH_NFT) return // 只处理 TruthNFT 合约
+  if (contract !== ContractName.TRUTH_NFT) return // Only process TruthNFT contract
 
-  // 反转事件数组：区块链API返回的是最新的在前，我们需要最旧的在前面
-  // 这样确保最新的事件数据最后写入，覆盖之前的值（例如 owner_address）
+  // Reverse event array: blockchain API returns newest first, we need oldest first
+  // This ensures latest event data is written last, overwriting previous values (e.g., owner_address)
   const reversedEvents = [...syncResult.fetchResult.events].reverse()
 
-  // 处理所有 Transfer 事件
+  // Process all Transfer events
   for (const event of reversedEvents) {
     if (event.eventName === 'Transfer') {
       await handleTransfer(scope, event)

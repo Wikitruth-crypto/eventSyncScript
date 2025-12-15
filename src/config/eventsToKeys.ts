@@ -1,21 +1,21 @@
 /**
- * 事件名称与数据库表字段的映射配置
+ * Event name to database table field mapping configuration
  * 
- * 用于统一管理事件到数据库字段的映射关系
- * 格式：事件名称 -> { 表名: [字段名列表] }
+ * Used to centrally manage event to database field mapping relationships
+ * Format: event name -> { table: [field name list] }
  */
 
 export interface EventToTableFields {
     table: string
     fields: string[]
-    operation?: 'insert' | 'update' | 'upsert' // 操作类型，默认为 update
+    operation?: 'insert' | 'update' | 'upsert' // Operation type, defaults to update
 }
 
 /**
- * 事件名称到表字段的映射
+ * Event name to table field mapping
  */
 export const EVENT_TO_TABLE_FIELDS: Record<string, EventToTableFields[]> = {
-    // ========== TruthBox 合约事件 ==========
+    // ========== TruthBox Contract Events ==========
     BoxCreated: [
         {
             table: 'boxes',
@@ -66,7 +66,7 @@ export const EVENT_TO_TABLE_FIELDS: Record<string, EventToTableFields[]> = {
         },
     ],
 
-    // ========== Exchange 合约事件 ==========
+    // ========== Exchange Contract Events ==========
     BoxListed: [
         {
             table: 'boxes',
@@ -128,7 +128,7 @@ export const EVENT_TO_TABLE_FIELDS: Record<string, EventToTableFields[]> = {
         },
     ],
 
-    // ========== FundManager 合约事件 ==========
+    // ========== FundManager Contract Events ==========
     OrderAmountPaid: [
         {
             table: 'payments',
@@ -169,7 +169,7 @@ export const EVENT_TO_TABLE_FIELDS: Record<string, EventToTableFields[]> = {
         },
     ],
 
-    // ========== TruthNFT 合约事件 ==========
+    // ========== TruthNFT Contract Events ==========
     Transfer: [
         {
             table: 'boxes',
@@ -183,7 +183,7 @@ export const EVENT_TO_TABLE_FIELDS: Record<string, EventToTableFields[]> = {
         },
     ],
 
-    // ========== UserId 合约事件 ==========
+    // ========== UserId Contract Events ==========
     Blacklist: [
         {
             table: 'user_addresses',
@@ -194,18 +194,18 @@ export const EVENT_TO_TABLE_FIELDS: Record<string, EventToTableFields[]> = {
 }
 
 /**
- * 获取事件对应的表字段映射
- * @param eventName - 事件名称
- * @returns 表字段映射数组，如果事件不存在则返回空数组
+ * Get table field mapping for an event
+ * @param eventName - Event name
+ * @returns Table field mapping array, returns empty array if event doesn't exist
  */
 export const getEventTableFields = (eventName: string): EventToTableFields[] => {
     return EVENT_TO_TABLE_FIELDS[eventName] || []
 }
 
 /**
- * 检查事件是否存在映射配置
- * @param eventName - 事件名称
- * @returns 是否存在映射配置
+ * Check if event has mapping configuration
+ * @param eventName - Event name
+ * @returns Whether mapping configuration exists
  */
 export const hasEventMapping = (eventName: string): boolean => {
     return eventName in EVENT_TO_TABLE_FIELDS

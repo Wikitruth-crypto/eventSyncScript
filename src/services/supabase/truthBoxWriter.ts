@@ -14,27 +14,27 @@ export const persistTruthBoxSync = async (
   syncResult: RuntimeContractSyncResult,
 ) => {
   if (!isSupabaseConfigured()) {
-    console.warn('⚠️  SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY 未配置，跳过数据库写入')
+    console.warn('⚠️  SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY not configured, skipping database write')
     return
   }
 
-  // ✅ 先确保 users 记录存在（处理所有事件中的 userId）
+  // ✅ First ensure users records exist (process userId from all events)
   await ensureUsersExist(scope, syncResult.fetchResult)
 
-  // ✅ 然后确保 boxes 记录存在（处理 BoxCreated 等事件）
+  // ✅ Then ensure boxes records exist (process BoxCreated and other events)
   await ensureBoxesExist(scope, contract, syncResult.fetchResult)
 
-  // ✅ 最后处理 metadata
-  // 同时支持旧合约的 BoxInfoChanged 和新合约的 BoxCreated（包含 boxInfoCID）
+  // ✅ Finally process metadata
+  // Support both old contract's BoxInfoChanged and new contract's BoxCreated (contains boxInfoCID)
   const metadataEvents = syncResult.fetchResult.events.filter(
     event => {
       if (event.eventName === 'BoxInfoChanged') {
-        return true // 旧合约事件
+        return true // Old contract event
       }
       if (event.eventName === 'BoxCreated') {
-        // 新合约的 BoxCreated 事件包含 boxInfoCID 参数
+        // New contract's BoxCreated event contains boxInfoCID parameter
         const boxInfoCID = (event.args as Record<string, unknown>)?.boxInfoCID
-        return Boolean(boxInfoCID) // 只有包含 boxInfoCID 的 BoxCreated 才需要获取 metadata
+        return Boolean(boxInfoCID) // Only BoxCreated events with boxInfoCID need to fetch metadata
       }
       return false
     }

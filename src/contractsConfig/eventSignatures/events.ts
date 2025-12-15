@@ -36,7 +36,7 @@ export const CONTRACT_EVENT_SIGNATURES: Record<ContractName, string[]> = {
         'event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)',
     ],
 
-    // 其他合约（同步脚本不需要，但保留空数组以保持类型一致）
+    // Other contracts (not needed for sync script, but keep empty arrays to maintain type consistency)
     [ContractName.ADDRESS_MANAGER]: [],
     [ContractName.SIWE_AUTH]: [],
     [ContractName.OFFICIAL_TOKEN]: [],
@@ -46,22 +46,22 @@ export const CONTRACT_EVENT_SIGNATURES: Record<ContractName, string[]> = {
 };
 
 /**
- * 获取指定合约的所有事件签名
- * @param contractName - 合约名称
- * @returns 事件签名数组
+ * Get all event signatures for a specified contract
+ * @param contractName - Contract name
+ * @returns Event signatures array
  */
 export function getContractEventSignatures(contractName: ContractName): string[] {
     return CONTRACT_EVENT_SIGNATURES[contractName] || [];
 }
 
 /**
- * 获取所有需要同步的合约及其事件签名
- * @returns 合约名称到事件签名数组的映射
+ * Get all contracts to sync and their event signatures
+ * @returns Mapping of contract name to event signatures array
  */
 export function getAllSyncContracts(): Record<string, string[]> {
     const syncContracts: Record<string, string[]> = {};
 
-    // 只返回有事件的合约
+    // Only return contracts with events
     Object.entries(CONTRACT_EVENT_SIGNATURES).forEach(([contractName, signatures]) => {
         if (signatures.length > 0) {
             syncContracts[contractName] = signatures;

@@ -1,6 +1,6 @@
 /**
- * 通用事件解码工具
- * 支持多个合约的事件解码
+ * Universal event decoding utility
+ * Supports event decoding for multiple contracts
  */
 
 import type { RuntimeEvent } from '../oasisQuery/oasis-nexus/api'
@@ -12,7 +12,7 @@ import { NETWORK_CONTRACTS } from '../contractsConfig/contracts'
 import { SupportedChainId } from '../contractsConfig/types'
 
 /**
- * 解析合约地址（复用现有的逻辑）
+ * Resolve contract address (reuse existing logic)
  */
 const resolveContractAddress = (
     scope: RuntimeScope,
@@ -33,28 +33,28 @@ const resolveContractAddress = (
 }
 
 /**
- * 解码单个合约的事件
+ * Decode events for a single contract
  */
 export const decodeContractEvents = <TArgs = Record<string, unknown>>(
     rawEvents: RuntimeEvent[],
     contractName: ContractName,
     scope: RuntimeScope,
 ): DecodedRuntimeEvent<TArgs>[] => {
-    // 解析合约地址
+    // Resolve contract address
     const contractAddress = resolveContractAddress(scope, contractName)
     if (!contractAddress) {
-        console.warn(`⚠️  无法解析合约地址: ${contractName} (${scope.network}/${scope.layer})`)
+        console.warn(`⚠️  Unable to resolve contract address: ${contractName} (${scope.network}/${scope.layer})`)
         return []
     }
 
-    // 获取事件签名
+    // Get event signatures
     const eventSignatures = getContractEventSignatures(contractName)
     if (!eventSignatures || eventSignatures.length === 0) {
-        console.warn(`⚠️  合约 ${contractName} 没有事件签名配置`)
+        console.warn(`⚠️  Contract ${contractName} has no event signature configuration`)
         return []
     }
 
-    // 解码事件
+    // Decode events
     return decodeRuntimeEvents<TArgs>(rawEvents, {
         contractAddress,
         eventSignatures,
@@ -62,9 +62,9 @@ export const decodeContractEvents = <TArgs = Record<string, unknown>>(
 }
 
 /**
- * 解码多个合约的事件（自动识别合约）
- * 如果提供了合约名称，只解码该合约的事件
- * 如果没有提供，会尝试所有配置的合约
+ * Decode events for multiple contracts (auto-identify contracts)
+ * If contract name is provided, only decode events for that contract
+ * If not provided, will try all configured contracts
  */
 export const decodeMultiContractEvents = <TArgs = Record<string, unknown>>(
     rawEvents: RuntimeEvent[],
@@ -74,11 +74,11 @@ export const decodeMultiContractEvents = <TArgs = Record<string, unknown>>(
     const results: Array<DecodedRuntimeEvent<TArgs> & { contract: ContractName }> = []
 
     if (contractName) {
-        // 只解码指定合约的事件
+        // Only decode events for specified contract
         const decoded = decodeContractEvents<TArgs>(rawEvents, contractName, scope)
         results.push(...decoded.map(event => ({ ...event, contract: contractName })))
     } else {
-        // 尝试解码所有配置的合约
+        // Try decoding all configured contracts
         const contractsToTry: ContractName[] = [
             ContractName.TRUTH_BOX,
             ContractName.EXCHANGE,

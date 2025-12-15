@@ -8,8 +8,8 @@ import { getEventArgAsString, sanitizeForSupabase } from './utils'
 import type { DecodedRuntimeEvent } from '../../oasisQuery/app/services/events'
 
 /**
- * 处理 Blacklist 事件
- * 更新 user_addresses 表的 is_blacklisted 字段
+ * Handle Blacklist event
+ * Update user_addresses table is_blacklisted field
  */
 const handleBlacklist = async (
     scope: RuntimeScope,
@@ -22,7 +22,7 @@ const handleBlacklist = async (
 
     const supabase = getSupabaseClient()
 
-    // 处理布尔值
+    // Handle boolean value
     let isBlacklisted: boolean
     if (typeof statusRaw === 'boolean') {
         isBlacklisted = statusRaw
@@ -33,7 +33,7 @@ const handleBlacklist = async (
         isBlacklisted = statusStr === 'true' || statusStr === '1'
     }
 
-    // 先确保用户地址存在（使用 upsert）
+    // First ensure user address exists (use upsert)
     const addressData = sanitizeForSupabase({
         network: scope.network,
         layer: scope.layer,
@@ -53,7 +53,7 @@ const handleBlacklist = async (
 }
 
 /**
- * 处理 UserId 合约事件并写入 Supabase
+ * Process UserId contract events and write to Supabase
  */
 export const persistUserAddressSync = async (
     scope: RuntimeScope,
@@ -61,17 +61,17 @@ export const persistUserAddressSync = async (
     syncResult: RuntimeContractSyncResult,
 ): Promise<void> => {
     if (!isSupabaseConfigured()) {
-        console.warn('⚠️  SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY 未配置，跳过数据库写入')
+        console.warn('⚠️  SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY not configured, skipping database write')
         return
     }
 
-    if (contract !== ContractName.USER_ID) return // 只处理 UserId 合约
+    if (contract !== ContractName.USER_ID) return // Only process UserId contract
 
-    // 反转事件数组：区块链API返回的是最新的在前，我们需要最旧的在前面
-    // 这样确保最新的事件数据最后写入，覆盖之前的值（例如 is_blacklisted）
+    // Reverse event array: blockchain API returns newest first, we need oldest first
+    // This ensures latest event data is written last, overwriting previous values (e.g., is_blacklisted)
     const reversedEvents = [...syncResult.fetchResult.events].reverse()
 
-    // 处理所有 Blacklist 事件
+    // Process all Blacklist events
     for (const event of reversedEvents) {
         if (event.eventName === 'Blacklist') {
             await handleBlacklist(scope, event)

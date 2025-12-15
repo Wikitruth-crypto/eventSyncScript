@@ -1,6 +1,6 @@
 /**
- * 基于本地文件系统的状态存储实现（本地调试工具）
- * 不应在生产环境（GitHub Actions）中使用
+ * Implementation of state storage based on local file system (local debugging tool)
+ * Should not be used in production environment (GitHub Actions)
  */
 
 import { promises as fs } from 'node:fs'

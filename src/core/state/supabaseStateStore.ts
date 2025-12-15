@@ -1,6 +1,6 @@
 /**
- * 基于 Supabase 的状态存储实现
- * 用于生产环境（GitHub Actions），替代本地文件系统存储
+ * Implementation of state storage based on Supabase
+ * Used in production environment (GitHub Actions), replacing local file system storage
  */
 
 import { getSupabaseClient } from '../../config/supabase'
@@ -16,8 +16,8 @@ export interface SyncStatusData {
 }
 
 /**
- * 从 Supabase sync_status 表读取同步状态
- * 注意：Supabase 的 sync_status 表是按 network/layer/contract_name 存储的，每个合约有独立的同步状态
+ * Read sync status from Supabase sync_status table
+ * Note: The sync_status table in Supabase is stored by network/layer/contract_name, each contract has its own sync status
  */
 export const getSyncCursor = async (key: ContractSyncKey): Promise<SyncCursor> => {
   try {
@@ -32,13 +32,13 @@ export const getSyncCursor = async (key: ContractSyncKey): Promise<SyncCursor> =
       .single()
 
     if (error) {
-      // 如果记录不存在，返回默认值
+      // If record does not exist, return default value
       if (error.code === 'PGRST116') {
         return {
           lastBlock: SYNC_STATE_CONFIG.DEFAULT_START_BLOCK,
         }
       }
-      console.warn(`⚠️  读取 Supabase 同步状态失败:`, error.message)
+      console.warn(`⚠️  Failed to read Supabase sync status:`, error.message)
       return {
         lastBlock: SYNC_STATE_CONFIG.DEFAULT_START_BLOCK,
       }
@@ -56,7 +56,7 @@ export const getSyncCursor = async (key: ContractSyncKey): Promise<SyncCursor> =
     }
   } catch (error) {
     console.warn(
-      `⚠️  读取 Supabase 同步状态失败:`,
+      `⚠️  Failed to read Supabase sync status:`,
       error instanceof Error ? error.message : String(error),
     )
     return {
@@ -66,8 +66,8 @@ export const getSyncCursor = async (key: ContractSyncKey): Promise<SyncCursor> =
 }
 
 /**
- * 更新 Supabase sync_status 表的同步状态
- * 注意：这里更新的是特定合约的 last_synced_block
+ * Update sync status of Supabase sync_status table
+ * Note: Here we update the last_synced_block of the specific contract
  */
 export const updateSyncCursor = async (key: ContractSyncKey, cursor: SyncCursor): Promise<void> => {
   try {
@@ -89,21 +89,21 @@ export const updateSyncCursor = async (key: ContractSyncKey, cursor: SyncCursor)
       )
 
     if (error) {
-      console.warn(`⚠️  更新 Supabase 同步状态失败:`, error.message)
+      console.warn(`⚠️  Failed to update Supabase sync status:`, error.message)
       throw error
     }
   } catch (error) {
     console.warn(
-      `⚠️  更新 Supabase 同步状态失败:`,
+      `⚠️  Failed to update Supabase sync status:`,
       error instanceof Error ? error.message : String(error),
     )
-    // 不抛出错误，允许继续执行
+    // Do not throw error, allow continue execution
   }
 }
 
 /**
- * 更新 Supabase sync_status 表的同步状态（接受 RuntimeScope 和合约名称）
- * 用于主入口文件，更新特定合约的同步状态
+ * Update sync status of Supabase sync_status table (accept RuntimeScope and contract name)
+ * Used in main entry file, update sync status of specific contract
  */
 export const updateSyncStatus = async (
   scope: RuntimeScope,
@@ -129,23 +129,23 @@ export const updateSyncStatus = async (
       )
 
     if (error) {
-      console.warn(`⚠️  更新 Supabase 同步状态失败:`, error.message)
+      console.warn(`⚠️  Failed to update Supabase sync status:`, error.message)
       throw error
     }
   } catch (error) {
     console.warn(
-      `⚠️  更新 Supabase 同步状态失败:`,
+      `⚠️  Failed to update Supabase sync status:`,
       error instanceof Error ? error.message : String(error),
     )
-    // 不抛出错误，允许继续执行
+    // Do not throw error, allow continue execution
   }
 }
 
 /**
- * 从 Supabase 读取同步状态数据（兼容旧接口）
- * @param scope - 运行时范围（network 和 layer）
- * @param contract - 合约名称
- * @returns 同步状态数据，如果不存在则返回 null
+ * Read sync status data from Supabase (compatible with old interface)
+ * @param scope - Runtime scope (network and layer)
+ * @param contract - Contract name
+ * @returns Sync status data, if not exists, return null
  */
 export const getCurrentSupabaseData = async (
   scope: RuntimeScope,
@@ -163,7 +163,7 @@ export const getCurrentSupabaseData = async (
       .single()
 
     if (error) {
-      // 如果记录不存在，返回 null（将由调用方处理）
+      // If record does not exist, return null (will be handled by caller)
       if (error.code === 'PGRST116') {
         return null
       }
@@ -179,15 +179,15 @@ export const getCurrentSupabaseData = async (
       last_synced_at: data.last_synced_at,
     }
   } catch (error) {
-    console.error('❌ 读取 Supabase 同步状态失败：', error)
+    console.error('❌ Failed to read Supabase sync status:', error)
     throw error
   }
 }
 
 /**
- * 一次性获取所有合约的同步状态数据
- * @param scope - 运行时范围（network 和 layer）
- * @returns 所有合约的同步状态数据映射，键为合约名称，值为同步状态数据（如果不存在则为 null）
+ * Get all contracts sync status data at once
+ * @param scope - Runtime scope (network and layer)
+ * @returns All contracts sync status data mapping, key is contract name, value is sync status data (if not exists, return null)
  */
 export const getAllContractsSyncData = async (
   scope: RuntimeScope,
@@ -202,11 +202,11 @@ export const getAllContractsSyncData = async (
       .eq('layer', scope.layer)
 
     if (error) {
-      console.error('❌ 读取 Supabase 同步状态失败：', error)
+      console.error('❌ Failed to read Supabase sync status:', error)
       throw error
     }
 
-    // 创建一个映射，初始化为所有合约都为 null
+    // Create a mapping, initialized to all contracts are null
     const result: Record<ContractName, SyncStatusData | null> = {
       [ContractName.TRUTH_BOX]: null,
       [ContractName.TRUTH_NFT]: null,
@@ -221,7 +221,7 @@ export const getAllContractsSyncData = async (
       [ContractName.ERC20_SECRET]: null,
     }
 
-    // 填充从数据库读取的数据
+    // Fill data read from database
     if (data && Array.isArray(data)) {
       for (const item of data) {
         const contractName = item.contract_name as ContractName
@@ -236,19 +236,12 @@ export const getAllContractsSyncData = async (
 
     return result
   } catch (error) {
-    console.error('❌ 读取 Supabase 同步状态失败：', error)
+    console.error('❌ Failed to read Supabase sync status:', error)
     throw error
   }
 }
 
-/**
- * 获取起始区块高度
- * 如果 Supabase 中有记录，使用 last_synced_block + 1
- * 否则使用合约配置中的 startBlock
- * @param scope - 运行时范围
- * @param contract - 合约名称
- * @returns 起始区块高度
- */
+
 export const getStartBlockHeight = async (
   scope: RuntimeScope,
   contract: ContractName,
@@ -256,18 +249,18 @@ export const getStartBlockHeight = async (
   const syncStatus = await getCurrentSupabaseData(scope, contract)
 
   if (syncStatus && syncStatus.last_synced_block > 0) {
-    // 使用 Supabase 中的 last_synced_block + 1
+    // Use last_synced_block + 1 from Supabase
     return syncStatus.last_synced_block + 1
   }
 
-  // 如果没有记录，使用合约配置中的 startBlock
+  // If no record, use startBlock in contract configuration
   const addresses = scope.network === 'testnet' ? TESTNET_ADDRESSES : MAINNET_ADDRESSES
   const contractAddress = addresses[contract]
   if (contractAddress && contractAddress.startBlock) {
     return contractAddress.startBlock
   }
 
-  // 默认返回 0
+  // Default return 0
   return 0
 }
 

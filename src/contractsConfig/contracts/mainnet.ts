@@ -2,12 +2,12 @@ import { ContractAddresses } from '../types';
 import { TESTNET_ADDRESSES } from './testnet';
 
 /**
- * Sapphire Mainnet (23293) 合约地址配置
+ * Sapphire Mainnet (23294) contract address configuration
  * 
- * ⚠️ 重要说明：
- * 当前合约尚未部署到主网，暂时使用 Testnet 的配置作为 fallback。
- * 主网合约部署后，请更新此配置为实际的主网地址。
+ * ⚠️ Important Note:
+ * The contracts have not been deployed to the mainnet yet, so we are using the Testnet configuration as a fallback.
+ * Once the contracts are deployed to the mainnet, please update this configuration to the actual mainnet addresses.
  */
 export const MAINNET_ADDRESSES: ContractAddresses = {
-  ...TESTNET_ADDRESSES, // 暂时使用 Testnet 配置
+  ...TESTNET_ADDRESSES, // Currently using Testnet configuration as a fallback
 };

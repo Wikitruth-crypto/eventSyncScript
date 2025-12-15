@@ -12,7 +12,7 @@ import type { DecodedRuntimeEvent } from '../../oasisQuery/app/services/events'
 import { extractTimestamp } from '../../utils/extractTimestamp'
 
 /**
- * 生成记录 ID：transaction_hash-log_index
+ * Generate record ID: transaction_hash-log_index
  */
 const generateRecordId = (event: DecodedRuntimeEvent<Record<string, unknown>>): string => {
     const txHash = normalizeHash(event.raw.tx_hash ?? event.raw.eth_tx_hash)
@@ -21,12 +21,12 @@ const generateRecordId = (event: DecodedRuntimeEvent<Record<string, unknown>>): 
 }
 
 /**
- * 将交易哈希转换为 BYTEA
+ * Convert transaction hash to BYTEA
  */
 const hashToBytea = (hash: string): Uint8Array => {
-    // 移除 0x 前缀
+    // Remove 0x prefix
     const hex = hash.startsWith('0x') ? hash.slice(2) : hash
-    // 转换为 Uint8Array
+    // Convert to Uint8Array
     const bytes = new Uint8Array(hex.length / 2)
     for (let i = 0; i < hex.length; i += 2) {
         bytes[i / 2] = parseInt(hex.substr(i, 2), 16)
@@ -35,8 +35,8 @@ const hashToBytea = (hash: string): Uint8Array => {
 }
 
 /**
- * 处理 OrderAmountPaid 事件
- * 插入 payments 表
+ * Handle OrderAmountPaid event
+ * Insert into payments table
  */
 const handleOrderAmountPaid = async (
     scope: RuntimeScope,
@@ -74,8 +74,8 @@ const handleOrderAmountPaid = async (
 
     if (error) {
         console.error(`❌ Failed to insert payment for box ${boxId}:`, error.message)
-        console.error(`   错误详情:`, JSON.stringify(error, null, 2))
-        console.error(`   插入数据:`, JSON.stringify(paymentData, null, 2))
+        console.error(`   Error details:`, JSON.stringify(error, null, 2))
+        console.error(`   Insert data:`, JSON.stringify(paymentData, null, 2))
     }
 }
 
@@ -95,12 +95,12 @@ const handleOrderAmountWithdraw = async (
 
     if (!listRaw || !token || !userId || !amount || fundsTypeRaw === undefined) return
 
-    // list 是 uint256[] 数组
+    // list is uint256[] array
     const boxList = Array.isArray(listRaw)
         ? listRaw.map(item => String(item))
         : [String(listRaw)]
 
-    // fundsType 是 uint8，0 = Order, 1 = Refund
+    // fundsType is uint8, 0 = Order, 1 = Refund
     const fundsType = typeof fundsTypeRaw === 'bigint' ? Number(fundsTypeRaw) : Number(fundsTypeRaw)
     const withdrawType = fundsType === 0 ? 'Order' : 'Refund'
 
@@ -130,14 +130,14 @@ const handleOrderAmountWithdraw = async (
 
     if (error) {
         console.error(`❌ Failed to insert withdraw for user ${userId} (${withdrawType}):`, error.message)
-        console.error(`   错误详情:`, JSON.stringify(error, null, 2))
-        console.error(`   插入数据:`, JSON.stringify(withdrawData, null, 2))
+        console.error(`   Error details:`, JSON.stringify(error, null, 2))
+        console.error(`   Insert data:`, JSON.stringify(withdrawData, null, 2))
     }
 }
 
 /**
- * 处理 RewardAmountAdded 事件
- * 插入 rewards_addeds 表
+ * Handle RewardAmountAdded event
+ * Insert into rewards_addeds table
  */
 const handleRewardAmountAdded = async (
     scope: RuntimeScope,
@@ -150,7 +150,7 @@ const handleRewardAmountAdded = async (
 
     if (!boxId || !token || !amount || rewardTypeRaw === undefined) return
 
-    // rewardType 是 uint8，需要映射到字符串
+    // rewardType is uint8, needs to be mapped to string
     const rewardTypeNum = typeof rewardTypeRaw === 'bigint' ? Number(rewardTypeRaw) : Number(rewardTypeRaw)
     const rewardTypeMap: Record<number, 'Minter' | 'Seller' | 'Completer' | 'Total'> = {
         0: 'Minter',
@@ -185,14 +185,14 @@ const handleRewardAmountAdded = async (
 
     if (error) {
         console.error(`❌ Failed to insert reward for box ${boxId} (${rewardType}):`, error.message)
-        console.error(`   错误详情:`, JSON.stringify(error, null, 2))
-        console.error(`   插入数据:`, JSON.stringify(rewardData, null, 2))
+        console.error(`   Error details:`, JSON.stringify(error, null, 2))
+        console.error(`   Insert data:`, JSON.stringify(rewardData, null, 2))
     }
 }
 
 /**
- * 处理 HelperRewrdsWithdraw 事件
- * 插入 withdraws 表（withdraw_type: 'Helper'）
+ * Handle HelperRewrdsWithdraw event
+ * Insert into withdraws table (withdraw_type: 'Helper')
  */
 const handleHelperRewardsWithdraw = async (
     scope: RuntimeScope,
@@ -230,14 +230,14 @@ const handleHelperRewardsWithdraw = async (
 
     if (error) {
         console.error(`❌ Failed to insert helper reward withdraw for user ${userId}:`, error.message)
-        console.error(`   错误详情:`, JSON.stringify(error, null, 2))
-        console.error(`   插入数据:`, JSON.stringify(withdrawData, null, 2))
+        console.error(`   Error details:`, JSON.stringify(error, null, 2))
+        console.error(`   Insert data:`, JSON.stringify(withdrawData, null, 2))
     }
 }
 
 /**
- * 处理 MinterRewardsWithdraw 事件
- * 插入 withdraws 表（withdraw_type: 'Minter'）
+ * Handle MinterRewardsWithdraw event
+ * Insert into withdraws table (withdraw_type: 'Minter')
  */
 const handleMinterRewardsWithdraw = async (
     scope: RuntimeScope,
@@ -275,14 +275,14 @@ const handleMinterRewardsWithdraw = async (
 
     if (error) {
         console.error(`❌ Failed to insert minter reward withdraw for user ${userId}:`, error.message)
-        console.error(`   错误详情:`, JSON.stringify(error, null, 2))
-        console.error(`   插入数据:`, JSON.stringify(withdrawData, null, 2))
+        console.error(`   Error details:`, JSON.stringify(error, null, 2))
+        console.error(`   Insert data:`, JSON.stringify(withdrawData, null, 2))
     }
 }
 
 /**
- * 确保 fund_manager_state 记录存在
- * 这是 token_total_amounts 表外键约束的要求
+ * Ensure fund_manager_state record exists
+ * This is required by token_total_amounts table foreign key constraint
  */
 const ensureFundManagerStateExists = async (scope: RuntimeScope): Promise<void> => {
     const supabase = getSupabaseClient()
@@ -306,7 +306,7 @@ const ensureFundManagerStateExists = async (scope: RuntimeScope): Promise<void> 
 }
 
 /**
- * 处理 FundManager 合约事件并写入 Supabase
+ * Process FundManager contract events and write to Supabase
  */
 export const persistFundManagerSync = async (
     scope: RuntimeScope,
@@ -314,20 +314,20 @@ export const persistFundManagerSync = async (
     syncResult: RuntimeContractSyncResult,
 ): Promise<void> => {
     if (!isSupabaseConfigured()) {
-        console.warn('⚠️  SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY 未配置，跳过数据库写入')
+        console.warn('⚠️  SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY not configured, skipping database write')
         return
     }
 
-    if (contract !== ContractName.FUND_MANAGER) return // 只处理 FundManager 合约
+    if (contract !== ContractName.FUND_MANAGER) return // Only process FundManager contract
 
-    // ✅ 先确保 fund_manager_state 记录存在（payments 触发器需要）
+    // ✅ First ensure fund_manager_state record exists (required by payments trigger)
     await ensureFundManagerStateExists(scope)
 
-    // ✅ 然后确保 users 记录存在
+    // ✅ Then ensure users records exist
     await ensureUsersExist(scope, syncResult.fetchResult)
 
-    // 反转事件数组：区块链API返回的是最新的在前，我们需要最旧的在前面
-    // 这样确保最新的事件数据最后写入，覆盖之前的值
+    // Reverse event array: blockchain API returns newest first, we need oldest first
+    // This ensures latest event data is written last, overwriting previous values
     const reversedEvents = [...syncResult.fetchResult.events].reverse()
 
     // first stage: handle payment and reward added events

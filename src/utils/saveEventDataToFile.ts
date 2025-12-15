@@ -1,6 +1,6 @@
 /**
- * 保存事件数据到 JSON 文件的工具函数
- * 主要用于调试目的，正式环境中可以禁用
+ * Utility function to save event data to JSON files
+ * Mainly for debugging purposes, can be disabled in production environment
  */
 
 import { promises as fs } from 'node:fs'
@@ -33,10 +33,10 @@ export interface EventDataPayload {
 }
 
 /**
- * 解析输出文件路径
- * @param scope - 运行时范围
- * @param contract - 合约名称
- * @returns 输出文件路径
+ * Resolve output file path
+ * @param scope - Runtime scope
+ * @param contract - Contract name
+ * @returns Output file path
  */
 const resolveOutputPath = (scope: RuntimeScope, contract: ContractName): string => {
     const filename = `${contract.toLowerCase()}Events-${scope.network}-${scope.layer}.json`
@@ -44,11 +44,11 @@ const resolveOutputPath = (scope: RuntimeScope, contract: ContractName): string 
 }
 
 /**
- * 构建事件数据负载
- * @param scope - 运行时范围
- * @param contract - 合约名称
- * @param syncResult - 同步结果
- * @returns 事件数据负载
+ * Build event data payload
+ * @param scope - Runtime scope
+ * @param contract - Contract name
+ * @param syncResult - Sync result
+ * @returns Event data payload
  */
 const buildEventDataPayload = (
     scope: RuntimeScope,
@@ -64,17 +64,17 @@ const buildEventDataPayload = (
         pagesFetched: syncResult.fetchResult.pagesFetched,
         totalFetched: syncResult.fetchResult.totalFetched,
         eventCount: syncResult.fetchResult.rawEvents.length,
-        // 只保存原始事件数据，不保存解码后的数据
+        // Only save raw event data, don't save decoded data
         rawEvents: syncResult.fetchResult.rawEvents,
     }
 }
 
 /**
- * 保存事件数据到 JSON 文件
- * @param scope - 运行时范围
- * @param contract - 合约名称
- * @param syncResult - 同步结果
- * @returns 保存的文件路径，如果保存失败则返回 null
+ * Save event data to JSON file
+ * @param scope - Runtime scope
+ * @param contract - Contract name
+ * @param syncResult - Sync result
+ * @returns Saved file path, returns null if save fails
  */
 export const saveEventDataToFile = async (
     scope: RuntimeScope,
@@ -85,17 +85,17 @@ export const saveEventDataToFile = async (
         const payload = buildEventDataPayload(scope, contract, syncResult)
         const outputPath = resolveOutputPath(scope, contract)
 
-        // 确保目录存在
+        // Ensure directory exists
         await fs.mkdir(path.dirname(outputPath), { recursive: true })
 
-        // 写入文件
+        // Write file
         await fs.writeFile(outputPath, JSON.stringify(payload, null, 2), 'utf8')
 
-        console.log(`📝 已保存原始事件数据至 ${outputPath}`)
+        console.log(`📝 Saved raw event data to ${outputPath}`)
         return outputPath
     } catch (error) {
         console.warn(
-            `⚠️  保存事件数据到文件失败:`,
+            `⚠️  Failed to save event data to file:`,
             error instanceof Error ? error.message : String(error),
         )
         return null
@@ -103,9 +103,9 @@ export const saveEventDataToFile = async (
 }
 
 /**
- * 检查是否应该保存事件数据到文件
- * 可以通过环境变量 EVENT_SYNC_SAVE_JSON 控制（设置为 'true' 或 '1' 时保存）
- * @returns 是否应该保存
+ * Check if event data should be saved to file
+ * Can be controlled via environment variable EVENT_SYNC_SAVE_JSON (save when set to 'true' or '1')
+ * @returns Whether to save
  */
 export const shouldSaveEventDataToFile = (): boolean => {
     const envValue = process.env.EVENT_SYNC_SAVE_JSON

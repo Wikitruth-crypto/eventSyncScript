@@ -1,6 +1,6 @@
 // src/services/supabase/boxesWriter.ts
 import type { RuntimeScope } from '../../oasisQuery/types/searchScope'
-import { ContractName } from '../../contractsConfig/types' // 需要导入值，不只是类型
+import { ContractName } from '../../contractsConfig/types' // Need to import value, not just type
 import type { EventFetchResult } from '../../core/events'
 import { getSupabaseClient } from '../../config/supabase'
 import { getEventArg } from './eventArgs'
@@ -10,9 +10,9 @@ import { extractTimestamp } from '../../utils/extractTimestamp'
 // import { getProtocolConstants } from '../../contractsConfig/ProtocolConstants'
 
 /**
- * 处理 BoxCreated 事件，创建 boxes 记录
- * 支持旧合约（两个参数）和新合约（三个参数，包含 boxInfoCID）
- * 使用 upsert 避免重复键错误（如果 box 已存在则更新）
+ * Handle BoxCreated event, create boxes record
+ * Supports old contract (two parameters) and new contract (three parameters, includes boxInfoCID)
+ * Use upsert to avoid duplicate key errors (update if box already exists)
  */
 const handleBoxCreated = async (
     scope: RuntimeScope,
@@ -20,51 +20,51 @@ const handleBoxCreated = async (
 ) => {
 
 
-    // 使用通用工具安全地提取事件参数（正确处理 0 值）
+    // Use common utility to safely extract event parameters (correctly handle 0 values)
     const boxId = getEventArgAsString(event, 'boxId')
     const userId = getEventArgAsString(event, 'userId')
-    const boxInfoCID = getEventArgAsString(event, 'boxInfoCID') // 新合约包含此参数
+    const boxInfoCID = getEventArgAsString(event, 'boxInfoCID') // New contract includes this parameter
 
-    // 只有当 boxId 或 userId 不存在（undefined）时才跳过（0 是有效值）
+    // Only skip if boxId or userId is undefined (0 is a valid value)
     if (boxId === undefined || userId === undefined) return
 
     const supabase = getSupabaseClient()
 
-    // 从事件中提取时间戳
+    // Extract timestamp from event
     const createTimestamp = extractTimestamp(event)
 
-    // 创建新的 box 记录
-    // 注意：token_id 需要是字符串形式的数字，不能使用 BigInt（无法序列化）
-    // 注意：根据 supabase.config.ts，box_info_cid 是必填字段（可以是 null）
+    // Create new box record
+    // Note: token_id needs to be string-formatted number, cannot use BigInt (cannot serialize)
+    // Note: According to supabase.config.ts, box_info_cid is a required field (can be null)
     const boxData: Record<string, unknown> = {
         network: scope.network,
         layer: scope.layer,
         id: boxId,
-        token_id: boxId, // PostgreSQL BIGINT 可以接受字符串形式的数字
+        token_id: boxId, // PostgreSQL BIGINT can accept string-formatted numbers
         minter_id: userId,
-        owner_address: '0x0000000000000000000000000000000000000000', // 默认值，后续通过 Transfer 事件更新
+        owner_address: '0x0000000000000000000000000000000000000000', // Default value, will be updated via Transfer event
         status: 'Storing',
         price: '0',
         deadline: '0',
-        create_timestamp: createTimestamp, // 必填字段：创建时间戳
-        box_info_cid: null, // 必填字段，默认为 null
+        create_timestamp: createTimestamp, // Required field: creation timestamp
+        box_info_cid: null, // Required field, defaults to null
     }
 
-    // 如果新合约的 BoxCreated 事件包含 boxInfoCID，也保存它
+    // If new contract's BoxCreated event contains boxInfoCID, also save it
     if (boxInfoCID) {
-        // 清理 CID（移除 ipfs:// 前缀）
+        // Sanitize CID (remove ipfs:// prefix)
         const sanitizedCid = boxInfoCID.replace(/^ipfs:\/\//, '')
         boxData.box_info_cid = sanitizedCid
     }
 
-    // 清理整个对象，确保没有 BigInt
+    // Sanitize entire object to ensure no BigInt
     const sanitizedBoxData = sanitizeForSupabase(boxData) as Record<string, unknown>
     
-    // 使用 upsert 避免重复键错误（如果 box 已存在则更新，否则插入）
+    // Use upsert to avoid duplicate key errors (update if box exists, otherwise insert)
     const { error } = await supabase
         .from('boxes')
         .upsert(sanitizedBoxData, {
-            onConflict: 'network,layer,id', // 根据主键冲突处理
+            onConflict: 'network,layer,id', // Handle primary key conflict
         })
 
     if (error) {
@@ -75,7 +75,7 @@ const handleBoxCreated = async (
 }
 
 /**
- * 处理其他事件，更新 boxes 记录
+ * Handle other events, update boxes record
  */
 const handleBoxUpdate = async (
     scope: RuntimeScope,
@@ -83,9 +83,9 @@ const handleBoxUpdate = async (
 ) => {
     // const protocolConstants = getProtocolConstants(scope)
 
-    // 使用通用工具安全地提取事件参数（正确处理 0 值）
+    // Use common utility to safely extract event parameters (correctly handle 0 values)
     const boxId = getEventArgAsString(event, 'boxId')
-    // 只有当 boxId 不存在（undefined）时才跳过（'0' 是有效值）
+    // Only skip if boxId is undefined ('0' is a valid value)
     if (boxId === undefined) return
 
     const supabase = getSupabaseClient()
@@ -148,7 +148,7 @@ const handleBoxUpdate = async (
     }
 
     if (Object.keys(updates).length > 0) {
-        // 清理更新对象，确保没有 BigInt
+        // Sanitize update object to ensure no BigInt
         const sanitizedUpdates = sanitizeForSupabase(updates) as Record<string, unknown>
         const { error } = await supabase
             .from('boxes')
@@ -164,25 +164,25 @@ const handleBoxUpdate = async (
 }
 
 /**
- * 处理所有事件，确保 boxes 记录存在
- * 注意：事件是按顺序处理的，不需要检查记录是否存在
- * 优化：优先处理所有 BoxCreated 事件，然后再处理其他更新事件
+ * Process all events to ensure boxes records exist
+ * Note: Events are processed in order, no need to check if records exist
+ * Optimization: Prioritize processing all BoxCreated events first, then process other update events
  * 
- * 重要：区块链API返回的事件是最新的在前，需要反转数组确保最旧的事件先写入，
- * 最新的事件最后写入，这样才能保证数据库中的最终状态是正确的
+ * Important: Blockchain API returns events with newest first, need to reverse array to ensure oldest events are written first,
+ * latest events written last, so that the final state in database is correct
  */
 export const ensureBoxesExist = async (
     scope: RuntimeScope,
     contract: ContractName,
     fetchResult: EventFetchResult,
 ) => {
-    if (contract !== ContractName.TRUTH_BOX) return // 只处理 TruthBox 合约
+    if (contract !== ContractName.TRUTH_BOX) return // Only process TruthBox contract
 
-    // 反转事件数组：区块链API返回的是最新的在前，我们需要最旧的在前面
-    // 这样确保最新的事件数据最后写入，覆盖之前的值
+    // Reverse event array: blockchain API returns newest first, we need oldest first
+    // This ensures latest event data is written last, overwriting previous values
     const reversedEvents = [...fetchResult.events].reverse()
 
-    // 第一步：优先处理所有 BoxCreated 事件（创建新记录）
+    // First step: Prioritize processing all BoxCreated events (create new records)
     for (const event of reversedEvents) {
         if (event.eventName === 'BoxCreated') {
             const boxId = getEventArgAsString(event, 'boxId')
@@ -192,7 +192,7 @@ export const ensureBoxesExist = async (
         }
     }
 
-    // 第二步：处理其他更新事件（此时所有 box 记录应该已经存在）
+    // Second step: Process other update events (all box records should exist by now)
     for (const event of reversedEvents) {
         if (event.eventName !== 'BoxCreated') {
             const boxId = getEventArgAsString(event, 'boxId')

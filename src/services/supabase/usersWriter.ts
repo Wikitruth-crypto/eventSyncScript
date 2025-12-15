@@ -6,11 +6,11 @@ import { sanitizeForSupabase, getEventArgAsString } from './utils'
 import type { DecodedRuntimeEvent } from '../../oasisQuery/app/services/events'
 
 /**
- * 处理所有事件，确保 users 记录存在
- * 注意：事件按顺序处理，使用批量 upsert 提高性能
+ * Process all events to ensure users records exist
+ * Note: Events are processed in order, use batch upsert for better performance
  * 
- * 重要：虽然这里只是收集 userId，但为了保持一致性，我们也反转事件数组
- * 区块链API返回的事件是最新的在前
+ * Important: Although we're only collecting userId here, for consistency, we also reverse the event array
+ * Blockchain API returns events with newest first
  */
 export const ensureUsersExist = async (
     scope: RuntimeScope,
@@ -18,10 +18,10 @@ export const ensureUsersExist = async (
 ) => {
     const userIds = new Set<string>()
 
-    // 反转事件数组：区块链API返回的是最新的在前
+    // Reverse event array: blockchain API returns newest first
     const reversedEvents = [...fetchResult.events].reverse()
 
-    // 收集所有事件中的 userId（使用通用工具，正确处理 0 值）
+    // Collect userId from all events (use common utility, correctly handle 0 values)
     for (const event of reversedEvents) {
         const userId = getEventArgAsString(event, 'userId')
         if (userId) {
@@ -33,14 +33,14 @@ export const ensureUsersExist = async (
 
     const supabase = getSupabaseClient()
     
-    // 批量 upsert，避免多次查询
+    // Batch upsert to avoid multiple queries
     const userRecords = Array.from(userIds).map(userId => ({
         network: scope.network,
         layer: scope.layer,
         id: userId,
     }))
     
-    // 清理对象，确保没有 BigInt
+    // Sanitize objects to ensure no BigInt
     const sanitizedUserRecords = userRecords.map(record => 
         sanitizeForSupabase(record) as Record<string, unknown>
     )

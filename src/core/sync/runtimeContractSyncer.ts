@@ -67,8 +67,8 @@ export const syncRuntimeContractEvents = async <TArgs = Record<string, unknown>>
   const cursorKey = buildCursorKey(scope, contract)
   const cursor = await getSyncCursor(cursorKey)
 
-  // 确定查询的起始区块
-  // 如果指定了 fromRound，使用它；否则使用上次保存的区块高度 + 1
+  // Determine starting block for query
+  // If fromRound is specified, use it; otherwise use last saved block height + 1
   const startRound = fromRound ?? cursor.lastBlock + 1
 
   const fetchResult = await fetchRuntimeContractEvents<TArgs>({
@@ -86,7 +86,7 @@ export const syncRuntimeContractEvents = async <TArgs = Record<string, unknown>>
 
   const latestRawEvent = selectLatestEvent(fetchResult.rawEvents)
 
-  // 更新 cursor：使用实际处理到的最新事件
+  // Update cursor: use the latest event actually processed
   const nextCursor: SyncCursor = latestRawEvent
     ? {
         lastBlock: Math.max(cursor.lastBlock, latestRawEvent.round ?? cursor.lastBlock),
@@ -96,14 +96,14 @@ export const syncRuntimeContractEvents = async <TArgs = Record<string, unknown>>
       }
     : cursor
 
-  // 只有在实际处理了事件时才更新 cursor
+  // Only update cursor if events were actually processed
   if (latestRawEvent) {
     await updateSyncCursor(cursorKey, nextCursor)
   }
 
   return {
-    cursorBefore: cursor, // 返回脚本开始前的 cursor
-    cursorAfter: nextCursor, // 返回脚本结束后的 cursor
+    cursorBefore: cursor, // Return cursor before script started
+    cursorAfter: nextCursor, // Return cursor after script finished
     fetchResult,
   }
 }

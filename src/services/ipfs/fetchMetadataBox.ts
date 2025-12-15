@@ -30,14 +30,14 @@ export interface MetadataBoxPayload {
 }
 
 /**
- * 延迟函数
+ * Delay function
  */
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 /**
- * 从 IPFS 获取 MetadataBox 数据，带重试机制和网关切换
+ * Fetch MetadataBox data from IPFS with retry mechanism and gateway switching
  * @param cid - IPFS CID
- * @returns MetadataBox 数据
+ * @returns MetadataBox data
  */
 export const fetchMetadataBox = async (cid: string): Promise<MetadataBoxPayload> => {
   let lastError: Error | null = null
@@ -45,10 +45,10 @@ export const fetchMetadataBox = async (cid: string): Promise<MetadataBoxPayload>
 
   for (let attempt = 1; attempt <= IPFS_CONFIG.MAX_RETRIES; attempt++) {
     try {
-      // 每次重试前刷新网关状态，尝试不同的网关
+      // Refresh gateway status before each retry, try different gateways
       if (attempt > 1) {
         console.log(`🔄 Refreshing gateway status before retry ${attempt}...`)
-        // 清除缓存，强制重新选择网关
+        // Clear cache, force re-selection of gateway
         clearGatewayCache()
         await refreshGatewayStatus()
       }
@@ -58,7 +58,7 @@ export const fetchMetadataBox = async (cid: string): Promise<MetadataBoxPayload>
       
       console.log(`📡 Attempt ${attempt}/${IPFS_CONFIG.MAX_RETRIES}: Fetching from ${url}`)
       
-      // 尝试获取数据（使用带代理的 fetch）
+      // Try to fetch data (using fetch with proxy)
       const response = await fetchWithProxy(url, {}, IPFS_CONFIG.FETCH_TIMEOUT)
       
       if (!response.ok) {
@@ -67,7 +67,7 @@ export const fetchMetadataBox = async (cid: string): Promise<MetadataBoxPayload>
 
       const data = (await response.json()) as MetadataBoxPayload
       
-      // 成功获取数据
+      // Successfully fetched data
       if (attempt > 1) {
         console.log(`✅ Successfully fetched metadata for ${cid} on attempt ${attempt} from ${url}`)
       } else {
@@ -80,7 +80,7 @@ export const fetchMetadataBox = async (cid: string): Promise<MetadataBoxPayload>
       const errorCause = error instanceof Error && 'cause' in error ? String(error.cause) : ''
       lastError = error instanceof Error ? error : new Error(String(error))
       
-      // 详细的错误信息
+      // Detailed error information
       const detailedError = errorCause 
         ? `${errorMessage} (cause: ${errorCause})`
         : errorMessage
@@ -91,7 +91,7 @@ export const fetchMetadataBox = async (cid: string): Promise<MetadataBoxPayload>
         `: ${detailedError}`
       )
       
-      // 如果是最后一次尝试，抛出错误
+      // If this is the last attempt, throw error
       if (attempt === IPFS_CONFIG.MAX_RETRIES) {
         throw new Error(
           `Failed to fetch metadata ${cid} after ${IPFS_CONFIG.MAX_RETRIES} attempts. ` +
@@ -100,13 +100,13 @@ export const fetchMetadataBox = async (cid: string): Promise<MetadataBoxPayload>
         )
       }
 
-      // 计算延迟时间（指数退避：2s, 4s, 6s）
+      // Calculate delay time (exponential backoff: 2s, 4s, 6s)
       const delayMs = IPFS_CONFIG.RETRY_DELAY_BASE * attempt
       console.warn(`⏳ Waiting ${delayMs}ms before retry...`)
       await delay(delayMs)
     }
   }
 
-  // 理论上不会到达这里，但 TypeScript 需要
+  // Theoretically shouldn't reach here, but TypeScript needs it
   throw lastError || new Error(`Failed to fetch metadata ${cid}`)
 }

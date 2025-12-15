@@ -1,15 +1,15 @@
 /**
- * Supabase 写入工具函数
- * 用于处理 BigInt 序列化等问题
+ * Supabase write utility functions
+ * Used to handle BigInt serialization issues
  */
 
 import type { DecodedRuntimeEvent } from '../../oasisQuery/app/services/events'
 import { getEventArg } from './eventArgs'
 
 /**
- * 将值转换为字符串（处理 BigInt）
- * @param value - 要转换的值
- * @returns 字符串值
+ * Convert value to string (handle BigInt)
+ * @param value - Value to convert
+ * @returns String value
  */
 export const toString = (value: unknown): string => {
   if (typeof value === 'bigint') {
@@ -22,18 +22,18 @@ export const toString = (value: unknown): string => {
 }
 
 /**
- * 安全地提取事件参数并转换为字符串（正确处理 0 值）
- * @param event - 解码后的事件
- * @param key - 参数名
- * @returns 字符串值，如果参数不存在则返回 undefined
+ * Safely extract event parameter and convert to string (correctly handle 0 value)
+ * @param event - Decoded event
+ * @param key - Parameter name
+ * @returns String value, returns undefined if parameter does not exist
  */
 export const getEventArgAsString = (
   event: DecodedRuntimeEvent<Record<string, unknown>>,
   key: string,
 ): string | undefined => {
   const value = getEventArg<unknown>(event, key)
-  // 只有当值为 undefined 或 null 时才返回 undefined
-  // 0、'0'、false 等都是有效值
+  // Only return undefined when value is undefined or null
+  // 0, '0', false, etc. are valid values
   if (value === undefined || value === null) {
     return undefined
   }
@@ -41,10 +41,10 @@ export const getEventArgAsString = (
 }
 
 /**
- * 安全地提取事件参数并转换为字符串（正确处理 0 值），如果不存在则返回空字符串
- * @param event - 解码后的事件
- * @param key - 参数名
- * @returns 字符串值，如果参数不存在则返回空字符串
+ * Safely extract event parameter and convert to string (correctly handle 0 value), return empty string if parameter does not exist
+ * @param event - Decoded event
+ * @param key - Parameter name
+ * @returns String value, returns empty string if parameter does not exist
  */
 export const getEventArgAsStringOrEmpty = (
   event: DecodedRuntimeEvent<Record<string, unknown>>,
@@ -54,10 +54,10 @@ export const getEventArgAsStringOrEmpty = (
 }
 
 /**
- * 检查事件参数是否存在且有效（正确处理 0 值）
- * @param event - 解码后的事件
- * @param key - 参数名
- * @returns 如果参数存在且有效（包括 0）返回 true，否则返回 false
+ * Check if event parameter exists and is valid (correctly handle 0 value)
+ * @param event - Decoded event
+ * @param key - Parameter name
+ * @returns True if parameter exists and is valid (including 0), otherwise false
  */
 export const hasEventArg = (
   event: DecodedRuntimeEvent<Record<string, unknown>>,
@@ -68,9 +68,9 @@ export const hasEventArg = (
 }
 
 /**
- * 将值转换为字符串或 null（处理 BigInt）
- * @param value - 要转换的值
- * @returns 字符串值或 null
+ * Convert value to string or null (handle BigInt)
+ * @param value - Value to convert
+ * @returns String value or null
  */
 export const toStringOrNull = (value: unknown): string | null => {
   if (value === null || value === undefined) {
@@ -83,9 +83,9 @@ export const toStringOrNull = (value: unknown): string | null => {
 }
 
 /**
- * 递归清理对象中的 BigInt，转换为字符串或数字
- * @param obj - 要清理的对象
- * @returns 清理后的对象
+ * Recursively clean BigInt in object, convert to string or number
+ * @param obj - Object to clean
+ * @returns Cleaned object
  */
 export const sanitizeForSupabase = (obj: unknown): unknown => {
   if (obj === null || obj === undefined) {
@@ -93,12 +93,12 @@ export const sanitizeForSupabase = (obj: unknown): unknown => {
   }
   
   if (typeof obj === 'bigint') {
-    // BigInt 转换为字符串（Supabase NUMERIC 类型可以接受字符串）
+    // Convert BigInt to string (Supabase NUMERIC type can accept string)
     return obj.toString()
   }
   
   if (typeof obj === 'number') {
-    // 检查是否是安全整数，如果不是则转换为字符串
+    // Check if it is a safe integer, if not, convert to string
     if (!Number.isSafeInteger(obj)) {
       return obj.toString()
     }

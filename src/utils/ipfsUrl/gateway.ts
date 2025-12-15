@@ -1,7 +1,6 @@
 import { IPFS_GATEWAY_CONFIG, IPFS_GATEWAY_URLS } from '../../config/ipfs'
 import { fetchWithProxy } from '../fetchWithProxy'
 
-// 定义网关接口
 interface Gateway {
     url: string;
     isHealthy: boolean;
@@ -11,9 +10,9 @@ interface Gateway {
 }
 
 export const network = 'https://';
-export const end = '.ipfs.w3s.link/'; // 已舍弃，这是fleek的网关，已失效
+export const end = '.ipfs.w3s.link/'; // This is the gateway of fleek, which is no longer available
 
-// 初始化网关列表
+// Initialize gateway list
 const gateways: Gateway[] = IPFS_GATEWAY_URLS.map(url => ({
     url,
     isHealthy: true,
@@ -22,19 +21,18 @@ const gateways: Gateway[] = IPFS_GATEWAY_URLS.map(url => ({
     failureCount: 0,
 }));
 
-// 网关状态缓存
 const gatewayCache = new Map<string, { url: string; timestamp: number }>();
 
 /**
- * 清除网关缓存（用于强制重新选择网关）
+ * Clear gateway cache (used to force re-selection of gateway)
  */
 export const clearGatewayCache = () => {
     gatewayCache.clear();
 };
 
 /**
- * 检查网关健康状态
- * @param gateway 网关对象
+ * Check gateway health status
+ * @param gateway gateway object
  * @returns Promise<boolean>
  */
 const checkGatewayHealth = async (gateway: Gateway): Promise<boolean> => {
@@ -73,21 +71,21 @@ const checkGatewayHealth = async (gateway: Gateway): Promise<boolean> => {
 };
 
 /**
- * 获取最佳网关
+ * Get the best gateway
  * @param cid IPFS CID
  * @returns Promise<string>
  */
 export const getIpfsGateway = async (cid: string): Promise<string> => {
-    // 检查缓存
+    // Check cache
     const cached = gatewayCache.get(cid);
     if (cached && Date.now() - cached.timestamp < IPFS_GATEWAY_CONFIG.CACHE_DURATION) {
         return cached.url;
     }
 
-    // 首先尝试使用第一个网关
+    // First try using the first gateway
     const primaryGateway = gateways[0];
     
-    // 如果第一个网关不健康，检查其状态
+    // If the first gateway is not healthy, check its status
     if (!primaryGateway.isHealthy) {
         const isHealthy = await checkGatewayHealth(primaryGateway);
         if (isHealthy) {
@@ -99,7 +97,7 @@ export const getIpfsGateway = async (cid: string): Promise<string> => {
             return gatewayUrl;
         }
     } else {
-        // 如果第一个网关健康，直接使用
+        // If the first gateway is healthy, use it directly
         const gatewayUrl = primaryGateway.url.replace('{cid}', cid);
         gatewayCache.set(cid, {
             url: gatewayUrl,
@@ -108,16 +106,16 @@ export const getIpfsGateway = async (cid: string): Promise<string> => {
         return gatewayUrl;
     }
 
-    // 如果第一个网关不可用，尝试其他网关
+    // If the first gateway is not available, try other gateways
     const backupGateways = gateways.slice(1);
     const healthyBackupGateways = backupGateways.filter(g => g.isHealthy);
 
-    // 如果没有健康的备用网关，尝试重新检查所有备用网关
+    // If there are no healthy backup gateways, try to re-check all backup gateways
     if (healthyBackupGateways.length === 0) {
         await Promise.all(backupGateways.map(checkGatewayHealth));
     }
 
-    // 按响应时间排序
+    // Sort by response time
     const sortedGateways = [...backupGateways]
         .filter(g => g.isHealthy)
         .sort((a, b) => a.responseTime - b.responseTime);
@@ -129,7 +127,7 @@ export const getIpfsGateway = async (cid: string): Promise<string> => {
     const selectedGateway = sortedGateways[0];
     const gatewayUrl = selectedGateway.url.replace('{cid}', cid);
 
-    // 更新缓存
+    // Update cache
     gatewayCache.set(cid, {
         url: gatewayUrl,
         timestamp: Date.now(),
@@ -139,7 +137,7 @@ export const getIpfsGateway = async (cid: string): Promise<string> => {
 };
 
 /**
- * 定期检查所有网关的健康状态
+ * Periodically check the health status of all gateways
  */
 // const startHealthCheck = () => {
 //     setInterval(async () => {
@@ -147,18 +145,18 @@ export const getIpfsGateway = async (cid: string): Promise<string> => {
 //     }, GATEWAY_CONFIG.HEALTH_CHECK_INTERVAL);
 // };
 
-// // 启动健康检查
+// // Start health check
 // startHealthCheck();
 
 /**
- * 强制刷新网关状态
+ * Force refresh gateway status
  */
 export const refreshGatewayStatus = async () => {
     await Promise.all(gateways.map(checkGatewayHealth));
 };
 
 /**
- * 获取当前网关状态
+ * Get current gateway status
  */
 export const getGatewayStatus = () => {
     return gateways.map(g => ({

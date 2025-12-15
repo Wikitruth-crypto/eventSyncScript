@@ -13,11 +13,11 @@ export interface FetchExchangeEventsResult {
 }
 
 /**
- * 获取 Exchange 合约事件
- * @param scope - 运行时范围
- * @param lastSyncedBlock - 上次同步的区块高度（可选），如果未提供则使用合约配置的 startBlock
- * @param syncToSupabase - 是否同步到 Supabase 数据库
- * @param updateSyncBlock - 是否更新同步状态（默认 true）
+ * Fetch Exchange contract events
+ * @param scope - Runtime scope
+ * @param lastSyncedBlock - Last synced block height (optional), if not provided, uses contract config's startBlock
+ * @param syncToSupabase - Whether to sync to Supabase database
+ * @param updateSyncBlock - Whether to update sync status (default true)
  */
 export async function fetchExchangeEvents(
   scope: RuntimeScope = DEFAULT_SCOPE,
@@ -25,7 +25,7 @@ export async function fetchExchangeEvents(
   syncToSupabase: boolean = true,
   updateSyncBlock: boolean = true
 ): Promise<FetchExchangeEventsResult> {
-  console.log(`🌐 正在查询 Exchange：network=${scope.network}, layer=${scope.layer}`)
+  console.log(`🌐 Querying Exchange: network=${scope.network}, layer=${scope.layer}`)
 
   const fromRoundOverride = process.env.EVENT_SYNC_FROM_BLOCK
     ? Number(process.env.EVENT_SYNC_FROM_BLOCK)
@@ -41,7 +41,7 @@ export async function fetchExchangeEvents(
     fromRound: fromRoundOverride,
   })
 
-  // 使用统一的解码工具函数解码事件
+  // Decode events using unified decoding utility function
   const decodedEvents = decodeContractEvents(
     syncResult.fetchResult.rawEvents,
     ContractName.EXCHANGE,
@@ -50,7 +50,7 @@ export async function fetchExchangeEvents(
 
   // console.log("decodedEvents:",decodedEvents)
 
-  console.log(`✅ 已获取 ${decodedEvents.length} 条解码后的事件（总计 ${syncResult.fetchResult.totalFetched} 条原始事件，抓取 ${syncResult.fetchResult.pagesFetched} 页）`)
+  console.log(`✅ Fetched ${decodedEvents.length} decoded events (total ${syncResult.fetchResult.totalFetched} raw events, fetched ${syncResult.fetchResult.pagesFetched} pages)`)
 
   const syncResultWithDecodedEvents = {
     ...syncResult,
@@ -60,7 +60,7 @@ export async function fetchExchangeEvents(
     },
   }
 
-  // ✅ 写入数据库
+  // ✅ Write to database
   if(syncToSupabase) {
     await persistExchangeSync(scope, ContractName.EXCHANGE, syncResultWithDecodedEvents)
   }
@@ -70,11 +70,11 @@ export async function fetchExchangeEvents(
     outputPath = await saveEventDataToFile(scope, ContractName.EXCHANGE, syncResult)
   }
 
-  console.log(`📊 同步状态：从区块 ${syncResult.cursorBefore.lastBlock} 到 ${syncResult.cursorAfter.lastBlock}`)
+  console.log(`📊 Sync status: from block ${syncResult.cursorBefore.lastBlock} to ${syncResult.cursorAfter.lastBlock}`)
 
   const block_number = syncResult.cursorAfter.lastBlock
 
-  // 更新同步状态
+  // Update sync status
   if (updateSyncBlock && syncToSupabase) {
     await updateSyncStatus(scope, ContractName.EXCHANGE, block_number)
   }

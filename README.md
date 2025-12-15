@@ -1,182 +1,130 @@
 # WikiTruth Event Sync Script
 
-区块链事件同步脚本，用于将 Oasis Network 上的事件数据同步到 Supabase 数据库。
+Blockchain event synchronization script for syncing event data from Oasis Network to Supabase database.
 
-## 功能特性
+## Features
 
-- ✅ 支持多个合约的事件同步（TruthBox、TruthNFT、Exchange、FundManager、UserId）
-- ✅ 增量同步，自动记录同步进度
-- ✅ IPFS 元数据自动获取
-- ✅ 支持代理模式（本地开发）和直连模式（GitHub Actions）
-- ✅ 完整的错误处理和日志记录
+- ✅ Supports event synchronization for multiple contracts (TruthBox, TruthNFT, Exchange, FundManager, UserId)
+- ✅ Incremental synchronization with automatic progress tracking
+- ✅ Automatic IPFS metadata fetching
+- ✅ Supports proxy mode (local development) and direct connection mode (GitHub Actions)
+- ✅ Complete error handling and logging
 
-## 快速开始
+## Quick Start
 
-### 本地开发
+### Local Development
 
-1. **安装依赖**
+1. **Install Dependencies**
    ```bash
    cd eventSyncScript
    npm install
    ```
 
-2. **配置环境变量**
+2. **Configure Environment Variables**
    ```bash
-   # 复制公共配置模板
+   # Copy public configuration template
    cp .env.example .env
    
-   # 创建本地配置文件（包含敏感信息）
+   # Create local configuration file (contains sensitive information)
    cp .env.example .env.local
-   # 编辑 .env.local 文件，填入 Supabase 配置：
+   # Edit .env.local file and fill in Supabase configuration:
    # - SUPABASE_URL
    # - SUPABASE_ANON_KEY
    # - SUPABASE_SERVICE_ROLE_KEY
    ```
    
-   **注意**：
-   - `.env` 文件包含公共配置，可以提交到仓库
-   - `.env.local` 文件包含敏感信息（Supabase 配置），不会提交到仓库
-   - `.env.local` 中的配置会覆盖 `.env` 中的同名配置
+   **Note**:
+   - `.env` file contains public configuration and can be committed to the repository
+   - `.env.local` file contains sensitive information (Supabase configuration) and will not be committed
+   - Configuration in `.env.local` will override same-named configuration in `.env`
 
-3. **运行脚本**
+3. **Run Script**
    ```bash
    npm start
    ```
 
-### GitHub Actions 部署
+### GitHub Actions Deployment
 
-1. **配置 GitHub Secrets**
-   - 进入仓库设置：`Settings` > `Secrets and variables` > `Actions`
-   - 添加以下 Secrets：
-     - `SUPABASE_URL`: Supabase 项目 URL
+1. **Configure GitHub Secrets**
+   - Go to repository settings: `Settings` > `Secrets and variables` > `Actions`
+   - Add the following Secrets:
+     - `SUPABASE_URL`: Supabase project URL
      - `SUPABASE_SERVICE_ROLE_KEY`: Supabase Service Role Key
 
-2. **工作流会自动运行**
-   - 定时触发：每5分钟
-   - 手动触发：在 GitHub Actions 页面点击 "Run workflow"
+2. **Workflow Runs Automatically**
+   - Scheduled trigger: Every 5 minutes
+   - Manual trigger: Click "Run workflow" on the GitHub Actions page
 
-## 环境变量配置
+## Environment Variable Configuration
 
-### 文件结构
+### File Structure
 
-项目支持两种环境变量文件：
+The project supports two types of environment variable files:
 
-1. **`.env`** - 公共配置，**可以提交到仓库**
-   - 包含事件同步脚本的公共配置
-   - 不包含敏感信息
-   - 示例：`.env.example`（模板文件）
+1. **`.env`** - Public configuration, **can be committed to repository**
+   - Contains public configuration for event sync script
+   - Does not contain sensitive information
+   - Example: `.env.example` (template file)
 
-2. **`.env.local`** - 本地配置，**不提交到仓库**
-   - 包含 Supabase 等敏感信息
-   - 会覆盖 `.env` 中的同名配置
-   - 已添加到 `.gitignore`
+2. **`.env.local`** - Local configuration, **not committed to repository**
+   - Contains sensitive information such as Supabase credentials
+   - Overrides same-named configuration in `.env`
+   - Already added to `.gitignore`
 
-### 配置优先级
+### Configuration Priority
 
-环境变量的加载优先级（从高到低）：
-1. `.env.local` 文件（本地配置，覆盖其他配置）
-2. `.env` 文件（公共配置）
-3. 系统环境变量
+Environment variable loading priority (from highest to lowest):
+1. `.env.local` file (local configuration, overrides other configurations)
+2. `.env` file (public configuration)
+3. System environment variables
 
-### 必需配置（放在 `.env.local`）
+### Required Configuration (place in `.env.local`)
 
-- `SUPABASE_URL`: Supabase 项目 URL
+- `SUPABASE_URL`: Supabase project URL
 - `SUPABASE_SERVICE_ROLE_KEY`: Supabase Service Role Key
 
-### 可选配置（可以放在 `.env` 或 `.env.local`）
+### Optional Configuration (can be placed in `.env` or `.env.local`)
 
-- `EVENT_SYNC_USE_PROXY`: 是否使用代理（`true`/`1` 启用，默认禁用）
-- `EVENT_SYNC_SAVE_JSON`: 是否保存 JSON 文件（`true`/`1` 启用，默认禁用）
-- `EVENT_SYNC_FROM_BLOCK`: 指定起始区块高度
-- `EVENT_SYNC_LIMIT`: 每次查询的事件数量限制
-- `EVENT_SYNC_BATCH_SIZE`: 批次大小
-- `HTTP_PROXY`: HTTP 代理地址（启用代理时使用）
-- `HTTPS_PROXY`: HTTPS 代理地址（启用代理时使用）
+- `EVENT_SYNC_USE_PROXY`: Whether to use proxy (`true`/`1` to enable, disabled by default)
+- `EVENT_SYNC_SAVE_JSON`: Whether to save JSON files (`true`/`1` to enable, disabled by default)
+- `EVENT_SYNC_FROM_BLOCK`: Specify starting block height
+- `EVENT_SYNC_LIMIT`: Limit on number of events per query
+- `EVENT_SYNC_BATCH_SIZE`: Batch size
+- `HTTP_PROXY`: HTTP proxy address (used when proxy is enabled)
+- `HTTPS_PROXY`: HTTPS proxy address (used when proxy is enabled)
 
-## 项目结构
+## Development Tools
 
-```
-eventSyncScript/
-├── src/
-│   ├── config/              # 配置文件
-│   ├── contractsConfig/     # 合约配置
-│   ├── core/                # 核心逻辑
-│   │   ├── events/          # 事件获取
-│   │   ├── state/           # 状态管理
-│   │   └── sync/            # 同步逻辑
-│   ├── scripts/             # 各合约的 fetch 脚本
-│   ├── services/            # 服务层
-│   │   ├── ipfs/           # IPFS 元数据获取
-│   │   └── supabase/       # Supabase 数据写入
-│   ├── utils/              # 工具函数
-│   └── index.ts            # 入口文件
-├── .github/workflows/      # GitHub Actions 工作流
-└── package.json
-```
+### Local Debugging Tools
 
-## 支持的合约和事件
+Located in `src/local/` directory:
 
-### TruthBox
-- `BoxCreated` - 创建 Box 记录和元数据
-- `BoxStatusChanged` - 更新 Box 状态
-- `PriceChanged` - 更新价格
-- `DeadlineChanged` - 更新截止时间
-- `PrivateKeyPublished` - 更新私钥
+- `decodeEventsExample.ts` - Event decoding example
+- `downloadIpfsFile.ts` - IPFS file download tool
 
-### TruthNFT
-- `Transfer` - 更新 Box 的 owner_address
-
-### Exchange
-- `BoxListed` - 更新上架信息
-- `BoxPurchased` - 更新购买信息
-- `BidPlaced` - 记录竞标者
-- `CompleterAssigned` - 更新完成者信息
-- `RequestDeadlineChanged` - 更新退款截止时间
-- `ReviewDeadlineChanged` - 更新审核截止时间
-- `RefundPermitChanged` - 更新退款权限
-
-### FundManager
-- `OrderAmountPaid` - 记录支付
-- `OrderAmountWithdraw` - 记录提取
-- `RewardAmountAdded` - 记录奖励添加
-- `HelperRewrdsWithdraw` - 记录 Helper 奖励提取
-- `MinterRewardsWithdraw` - 记录 Minter 奖励提取
-
-### UserId
-- `Blacklist` - 更新用户黑名单状态
-
-## 开发工具
-
-### 本地调试工具
-
-位于 `src/local/` 目录：
-
-- `decodeEventsExample.ts` - 解码事件示例
-- `downloadIpfsFile.ts` - IPFS 文件下载工具
-
-运行方式：
+Run with:
 ```bash
 npm run decode:events
 npm run download:ipfs
 ```
 
-## 故障排查
+## Troubleshooting
 
-### 常见问题
+### Common Issues
 
-1. **代理连接失败**
-   - 检查 `EVENT_SYNC_USE_PROXY` 设置
-   - 确认 `HTTP_PROXY` 或 `HTTPS_PROXY` 配置正确
+1. **Proxy Connection Failed**
+   - Check `EVENT_SYNC_USE_PROXY` setting
+   - Verify `HTTP_PROXY` or `HTTPS_PROXY` configuration is correct
 
-2. **Supabase 连接失败**
-   - 检查 `SUPABASE_URL` 和 `SUPABASE_SERVICE_ROLE_KEY` 是否正确
-   - 确认 Supabase 项目状态正常
+2. **Supabase Connection Failed**
+   - Check if `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are correct
+   - Verify Supabase project status is normal
 
-3. **同步进度不更新**
-   - 检查 `sync_status` 表是否正确更新
-   - 查看日志确认是否有错误
+3. **Sync Progress Not Updating**
+   - Check if `sync_status` table is updated correctly
+   - Check logs to confirm if there are any errors
 
-## 许可证
+## License
 
-[根据项目许可证]
+[According to project license]
 

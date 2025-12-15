@@ -5,9 +5,6 @@ import {
 } from './gateway';
 
 /**
- * Convert IPFS URI or CID to a full IPFS gateway URL
- * ipfs 网关1：https://ipfs.io/ipfs/${cid}
- * ipfs 网关2：https://${cid}.ipfs.w3s.link/ ---- 已舍弃，这是fleek的网关，已失效
  * Input url:
  * 1. "bafkreiccjb4uhzhze2pyehnoo7qwkk73yhjl6k6scbzxss6idqkhghznom"
  * 2. "bafkreiccjb4uhzhze2pyehnoo7qwkk73yhjl6k6scbzxss6idqkhghznom/"
@@ -59,7 +56,7 @@ export const ipfsCidToUrl = async (uri: string): Promise<string> => {
     //     throw new Error('Invalid IPFS CID format');
     // }
 
-    // 使用智能网关选择系统获取最佳网关
+    // Use the intelligent gateway selection system to get the best gateway
     return await getIpfsGateway(cid);
 };
 

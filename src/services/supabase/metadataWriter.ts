@@ -40,7 +40,7 @@ const normalizeMetadataRecord = (
   boxId: string,
   metadata: MetadataBoxPayload,
 ): MetadataRecord => {
-  // 处理 timestamp，确保 BigInt 转换为 number
+  // Handle timestamp, ensure BigInt is converted to number
   let timestamp: number | null = null
   if (metadata.timestamp !== undefined && metadata.timestamp !== null) {
     if (typeof metadata.timestamp === 'bigint') {
@@ -52,7 +52,7 @@ const normalizeMetadataRecord = (
     }
   }
 
-  // 清理可能包含 BigInt 的嵌套对象
+  // Sanitize nested objects that may contain BigInt
   const encryptionSlicesMetadataCID = metadata.encryptionSlicesMetadataCID
     ? (sanitizeForSupabase(metadata.encryptionSlicesMetadataCID) as Record<string, unknown>)
     : null
@@ -91,7 +91,7 @@ const normalizeMetadataRecord = (
 }
 
 const extractBoxInfoCid = (event: DecodedRuntimeEvent<Record<string, unknown>>) => {
-  // 使用通用工具安全地提取事件参数（正确处理 0 值）
+  // Use common utility to safely extract event parameters (correctly handle 0 values)
   return {
     boxId: getEventArgAsString(event, 'boxId'),
     boxInfoCID: getEventArgAsString(event, 'boxInfoCID'),
@@ -107,16 +107,16 @@ export const upsertMetadataFromEvents = async (
   scope: RuntimeScope,
   events: DecodedRuntimeEvent<Record<string, unknown>>[],
 ) => {
-  // 反转事件数组：区块链API返回的是最新的在前，我们需要最旧的在前面
-  // 这样确保最新的 metadata 最后写入，覆盖之前的值
+  // Reverse event array: blockchain API returns newest first, we need oldest first
+  // This ensures latest metadata is written last, overwriting previous values
   const reversedEvents = [...events].reverse()
   
   const targets = reversedEvents
     .map(event => {
       const { boxId, boxInfoCID } = extractBoxInfoCid(event)
       const cid = sanitizeCid(boxInfoCID)
-      // 使用通用工具后，boxId 为 '0' 时不会被过滤
-      // 只有当 boxId 不存在（undefined）或 cid 为空时才跳过
+      // After using common utility, boxId of '0' will not be filtered
+      // Only skip if boxId is undefined or cid is empty
       if (boxId === undefined || !cid) return null
       return { boxId, cid }
     })
@@ -139,7 +139,7 @@ export const upsertMetadataFromEvents = async (
     }
   }
 
-  // 如果有失败的记录，记录日志但不阻止处理成功的记录
+  // If there are failed records, log but don't prevent processing successful records
   if (failedBoxes.length > 0) {
     console.warn(
       `⚠️  ${failedBoxes.length} box metadata fetch failed. ` +
@@ -150,7 +150,7 @@ export const upsertMetadataFromEvents = async (
   if (!records.length) return
 
   const supabase = getSupabaseClient()
-  // 清理所有记录，确保没有 BigInt
+  // Sanitize all records to ensure no BigInt
   const sanitizedRecords = records.map(record => sanitizeForSupabase(record) as MetadataRecord)
   const { error } = await supabase.from('metadata_boxes').upsert(sanitizedRecords, {
     onConflict: 'network,layer,id',
@@ -159,7 +159,7 @@ export const upsertMetadataFromEvents = async (
     throw new Error(`Failed to upsert metadata_boxes: ${error.message}`)
   }
 
-  // update boxes table so box_info_cid stays fresh
+  // Update boxes table so box_info_cid stays fresh
   await Promise.all(
     records.map(record =>
       supabase
