@@ -15,7 +15,7 @@ export const CONTRACT_EVENT_SIGNATURES: Record<ContractName, string[]> = {
     [ContractName.FUND_MANAGER]: [
         'event OrderAmountPaid(uint256 indexed boxId, uint256 indexed userId, address indexed token, uint256 amount)',
         'event OrderAmountWithdraw(uint256[] list, address indexed token, uint256 indexed userId, uint256 amount, uint8 fundsType)',
-        'event RewardAmountAdded(uint256 indexed boxId, address indexed token, uint256 amount, uint8 rewardType)',
+        'event RewardsAdded(uint256 indexed boxId, address indexed token, uint256 amount, uint8 rewardType)',
         'event HelperRewrdsWithdraw(uint256 indexed userId, address indexed token, uint256 amount)',
         'event MinterRewardsWithdraw(uint256 indexed userId, address indexed token, uint256 amount)',
     ],

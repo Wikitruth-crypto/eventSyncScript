@@ -5,6 +5,7 @@
 
 import type { DecodedRuntimeEvent } from '../../oasisQuery/app/services/events'
 import { getEventArg } from './eventArgs'
+import { fixEventErrorParam } from '../../utils/fixEventsErrorParam'
 
 /**
  * Convert value to string (handle BigInt)
@@ -37,7 +38,9 @@ export const getEventArgAsString = (
   if (value === undefined || value === null) {
     return undefined
   }
-  return toString(value)
+  let stringValue = fixEventErrorParam(event,key,toString(value))
+  
+  return stringValue
 }
 
 /**

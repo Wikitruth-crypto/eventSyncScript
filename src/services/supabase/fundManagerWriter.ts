@@ -17,7 +17,12 @@ import { extractTimestamp } from '../../utils/extractTimestamp'
 const generateRecordId = (event: DecodedRuntimeEvent<Record<string, unknown>>): string => {
     const txHash = normalizeHash(event.raw.tx_hash ?? event.raw.eth_tx_hash)
     const logIndex = (event.raw.body as Record<string, unknown>)?.log_index ?? event.raw.tx_index ?? 0
-    return `${txHash}-${logIndex}`
+    
+    // Use the data
+    const data = event.raw.body?.data as string | undefined
+    const dataHash = data ? data.slice(-8) : 'unknown'
+    
+    return `${txHash}-${logIndex}-${dataHash}`
 }
 
 /**
@@ -70,18 +75,21 @@ const handleOrderAmountPaid = async (
         block_number: String(blockNumber),
     }) as Record<string, unknown>
 
-    const { error } = await supabase.from('payments').insert(paymentData)
+    const { error } = await supabase
+        .from('payments')
+        .upsert(paymentData, {
+            onConflict: 'network,layer,id'
+        })
 
     if (error) {
         console.error(`❌ Failed to insert payment for box ${boxId}:`, error.message)
-        console.error(`   Error details:`, JSON.stringify(error, null, 2))
-        console.error(`   Insert data:`, JSON.stringify(paymentData, null, 2))
+        console.error(`   Error info:`, JSON.stringify(error, null, 2))
     }
 }
 
 /**
- * 处理 OrderAmountWithdraw 事件
- * 插入 withdraws 表（withdraw_type: 'Order'）
+ * Handle OrderAmountWithdraw event
+ * Insert into withdraw table
  */
 const handleOrderAmountWithdraw = async (
     scope: RuntimeScope,
@@ -95,12 +103,12 @@ const handleOrderAmountWithdraw = async (
 
     if (!listRaw || !token || !userId || !amount || fundsTypeRaw === undefined) return
 
-    // list is uint256[] array
+    // list 是 uint256[] 数组
     const boxList = Array.isArray(listRaw)
         ? listRaw.map(item => String(item))
         : [String(listRaw)]
 
-    // fundsType is uint8, 0 = Order, 1 = Refund
+    // fundsType is uint8，0 = Order, 1 = Refund
     const fundsType = typeof fundsTypeRaw === 'bigint' ? Number(fundsTypeRaw) : Number(fundsTypeRaw)
     const withdrawType = fundsType === 0 ? 'Order' : 'Refund'
 
@@ -126,20 +134,22 @@ const handleOrderAmountWithdraw = async (
         block_number: String(blockNumber),
     }) as Record<string, unknown>
 
-    const { error } = await supabase.from('withdraws').insert(withdrawData)
+    const { error } = await supabase
+        .from('withdraws')
+        .upsert(withdrawData, {
+            onConflict: 'network,layer,id'
+        })
 
     if (error) {
         console.error(`❌ Failed to insert withdraw for user ${userId} (${withdrawType}):`, error.message)
-        console.error(`   Error details:`, JSON.stringify(error, null, 2))
-        console.error(`   Insert data:`, JSON.stringify(withdrawData, null, 2))
+        console.error(`   Error info:`, JSON.stringify(error, null, 2))
     }
 }
-
 /**
- * Handle RewardAmountAdded event
+ * Handle RewardsAdded event
  * Insert into rewards_addeds table
  */
-const handleRewardAmountAdded = async (
+const handleRewardsAdded = async (
     scope: RuntimeScope,
     event: DecodedRuntimeEvent<Record<string, unknown>>,
 ): Promise<void> => {
@@ -150,15 +160,20 @@ const handleRewardAmountAdded = async (
 
     if (!boxId || !token || !amount || rewardTypeRaw === undefined) return
 
-    // rewardType is uint8, needs to be mapped to string
     const rewardTypeNum = typeof rewardTypeRaw === 'bigint' ? Number(rewardTypeRaw) : Number(rewardTypeRaw)
+    console.log ('reward_uint8:',rewardTypeNum)
     const rewardTypeMap: Record<number, 'Minter' | 'Seller' | 'Completer' | 'Total'> = {
         0: 'Minter',
         1: 'Seller',
         2: 'Completer',
         3: 'Total',
     }
-    const rewardType = rewardTypeMap[rewardTypeNum] || 'Total'
+    let rewardType
+    if (rewardTypeNum === 0) {
+        rewardType = 'Minter'
+    } else {
+        rewardType = rewardTypeMap[rewardTypeNum] || 'Total'
+    }
 
     const supabase = getSupabaseClient()
     const timestamp = extractTimestamp(event)
@@ -181,14 +196,18 @@ const handleRewardAmountAdded = async (
         block_number: String(blockNumber),
     }) as Record<string, unknown>
 
-    const { error } = await supabase.from('rewards_addeds').insert(rewardData)
+    const { error } = await supabase
+        .from('rewards_addeds')
+        .upsert(rewardData, {
+            onConflict: 'network,layer,id'
+        })
 
     if (error) {
         console.error(`❌ Failed to insert reward for box ${boxId} (${rewardType}):`, error.message)
-        console.error(`   Error details:`, JSON.stringify(error, null, 2))
-        console.error(`   Insert data:`, JSON.stringify(rewardData, null, 2))
+        console.error(`   Error info:`, JSON.stringify(error, null, 2))
     }
 }
+
 
 /**
  * Handle HelperRewrdsWithdraw event
@@ -217,7 +236,7 @@ const handleHelperRewardsWithdraw = async (
         layer: scope.layer,
         id: recordId,
         token: token.toLowerCase(),
-        box_list: [], // Helper 和 Minter 奖励提取不涉及 box
+        box_list: [], // Helper and Minter is not list
         user_id: userId,
         amount: amount,
         timestamp: timestamp,
@@ -226,14 +245,18 @@ const handleHelperRewardsWithdraw = async (
         block_number: String(blockNumber),
     }) as Record<string, unknown>
 
-    const { error } = await supabase.from('withdraws').insert(withdrawData)
+    const { error } = await supabase
+        .from('withdraws')
+        .upsert(withdrawData, {
+            onConflict: 'network,layer,id'
+        })
 
     if (error) {
         console.error(`❌ Failed to insert helper reward withdraw for user ${userId}:`, error.message)
-        console.error(`   Error details:`, JSON.stringify(error, null, 2))
-        console.error(`   Insert data:`, JSON.stringify(withdrawData, null, 2))
+        console.error(`   Error info:`, JSON.stringify(error, null, 2))
     }
 }
+
 
 /**
  * Handle MinterRewardsWithdraw event
@@ -262,7 +285,7 @@ const handleMinterRewardsWithdraw = async (
         layer: scope.layer,
         id: recordId,
         token: token.toLowerCase(),
-        box_list: [], // Helper 和 Minter 奖励提取不涉及 box
+        box_list: [], 
         user_id: userId,
         amount: amount,
         timestamp: timestamp,
@@ -271,12 +294,15 @@ const handleMinterRewardsWithdraw = async (
         block_number: String(blockNumber),
     }) as Record<string, unknown>
 
-    const { error } = await supabase.from('withdraws').insert(withdrawData)
+    const { error } = await supabase
+        .from('withdraws')
+        .upsert(withdrawData, {
+            onConflict: 'network,layer,id'
+        })
 
     if (error) {
         console.error(`❌ Failed to insert minter reward withdraw for user ${userId}:`, error.message)
-        console.error(`   Error details:`, JSON.stringify(error, null, 2))
-        console.error(`   Insert data:`, JSON.stringify(withdrawData, null, 2))
+        console.error(`   Error info:`, JSON.stringify(error, null, 2))
     }
 }
 
@@ -336,8 +362,8 @@ export const persistFundManagerSync = async (
             case 'OrderAmountPaid':
                 await handleOrderAmountPaid(scope, event)
                 break
-            case 'RewardAmountAdded':
-                await handleRewardAmountAdded(scope, event)
+            case 'RewardsAdded':
+                await handleRewardsAdded(scope, event)
                 break
         }
     }
